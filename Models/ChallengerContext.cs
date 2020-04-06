@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Models
 {
-    public class ChallengesContext : DbContext
+    public class ChallengerContext : DbContext
     {
         public DbSet<Team> Teams { get; set; }
         public DbSet<Score> Scores { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Bracket> Brackets { get; set; }
 
-        public ChallengesContext() : base()
+        public ChallengerContext() : base()
         {
         }
 
-        public ChallengesContext(DbContextOptions<ChallengesContext> options) : base(options)
+        public ChallengerContext(DbContextOptions<ChallengerContext> options) : base(options)
         {
         }
 

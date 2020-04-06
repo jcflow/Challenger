@@ -6,7 +6,7 @@ namespace Models
     {
         static void Main(string[] args)
         {
-            using (var context = new ChallengesContext())
+            using (var context = new ChallengerContext())
             {
 
                 Console.WriteLine("Inserting tournaments...");
@@ -70,16 +70,6 @@ namespace Models
 
                 context.Scores.Add(new Score { Bracket = bracket0, Team = team1, Value = 3 });
                 context.Scores.Add(new Score { Bracket = bracket0, Team = team5, Value = 0 });
-                context.SaveChanges();
-
-                Console.WriteLine("Assigning brackets to tournament...");
-                tournament.Brackets.Add(bracket21);
-                tournament.Brackets.Add(bracket22);
-                tournament.Brackets.Add(bracket23);
-                tournament.Brackets.Add(bracket24);
-                tournament.Brackets.Add(bracket11);
-                tournament.Brackets.Add(bracket12);
-                tournament.Brackets.Add(bracket0);
                 context.SaveChanges();
             }
         }
