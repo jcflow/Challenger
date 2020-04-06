@@ -1,0 +1,15 @@
+/Users/jcflow/Projects/Challenger/Schema/bin/Debug/netcoreapp3.1/Schema.deps.json
+/Users/jcflow/Projects/Challenger/Schema/bin/Debug/netcoreapp3.1/Schema.dll
+/Users/jcflow/Projects/Challenger/Schema/bin/Debug/netcoreapp3.1/Schema.pdb
+/Users/jcflow/Projects/Challenger/Schema/bin/Debug/netcoreapp3.1/Models.dll
+/Users/jcflow/Projects/Challenger/Schema/bin/Debug/netcoreapp3.1/Models.pdb
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.csprojAssemblyReference.cache
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.csproj.CoreCompileInputs.cache
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.AssemblyInfoInputs.cache
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.AssemblyInfo.cs
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.RazorTargetAssemblyInfo.cache
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.csproj.CopyComplete
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/staticwebassets/Schema.StaticWebAssets.Manifest.cache
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/staticwebassets/Schema.StaticWebAssets.xml
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.dll
+/Users/jcflow/Projects/Challenger/Schema/obj/Debug/netcoreapp3.1/Schema.pdb
