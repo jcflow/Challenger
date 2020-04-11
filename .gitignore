@@ -1,3 +1,7 @@
 .vs/
 Models/bin/
 Models/obj/
+API/bin/
+API/obj/
+Schema/bin/
+Schema/obj/
