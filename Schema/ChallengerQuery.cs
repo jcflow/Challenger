@@ -19,6 +19,18 @@ namespace Schema
                     return tournamentRepository.GetTournaments();
                 }
             );
+
+            Field<TournamentType>(
+                "tournament",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" }
+                ),
+                resolve: context =>
+                {
+                    var id = context.GetArgument<int>("id");
+                    return tournamentRepository.GetTournamentByID(id);
+                }
+            );
         }
     }
 }

@@ -38,3 +38,49 @@ h1, h2, h3 {
   height: 1.5em;
   margin-right: 0.5em;
 }
+
+.tournamentForm {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.tournamentForm input {
+  font-size: 1.5rem;
+  border-radius: 30px;
+  padding: 0.5em 1em;
+  border:none;
+}
+
+.tournamentForm .dividedField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tournamentForm .dividedField input {
+  width: 85%;
+  display: inline-block;
+}
+
+.tournamentForm .dividedField button {
+   display: inline-block;
+   background-color: #27ae60;
+   border-radius: 50%;
+   width: 3em;
+   height: 3em;
+   font-size: 1.5em;
+ }
+
+.tournamentForm button {
+  background-color: #27ae60;
+  font-size: 1.5rem;
+  border-radius: 30px;
+  padding: 0.5em 1em;
+  border:none;
+}
+
+.tournamentForm > * {
+  margin-top: 1em;
+}
