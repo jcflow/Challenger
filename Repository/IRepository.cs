@@ -15,7 +15,7 @@ namespace Repository
         T GetByID(int id);
         IEnumerable<T> GetWithRawSqlAsync(string query,
             params object[] parameters);
-        void Insert(T entity);
+        T Insert(T entity);
         void Update(T entityToUpdate);
     }
 }

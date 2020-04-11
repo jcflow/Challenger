@@ -28,9 +28,9 @@ namespace Repository.EF
             return base.GetByID(teamId);
         }
 
-        public void InsertTeam(Team team)
+        public Team InsertTeam(Team team)
         {
-            base.Insert(team);
+            return base.Insert(team);
         }
 
         public void UpdateTeam(Team team)

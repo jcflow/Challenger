@@ -49,9 +49,11 @@ namespace Repository.EF
             return _dbSet.Find(id);
         }
 
-        public virtual void Insert(T entity)
+        public virtual T Insert(T entity)
         {
-            _dbSet.Add(entity);
+            var entry = _dbSet.Add(entity);
+            _context.SaveChanges();
+            return entry.Entity;
         }
 
         public virtual void Delete(int id)

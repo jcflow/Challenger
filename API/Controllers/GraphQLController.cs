@@ -11,6 +11,7 @@ using Schema;
 namespace API.Controllers
 {
     [Route("graphql")]
+    [ApiController]
     public class GraphQLController : Controller
     {
         private readonly IDocumentExecuter _executer;
@@ -27,28 +28,21 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GraphQLQuery query)
         {
-            //var result = await _executer.ExecuteAsync(_ =>
-            //{
-            //    _.Schema = _schema;
-            //    _.Query = query.Query;
-            //    _.Inputs = query.Variables?.ToInputs();
-
-            //}).ConfigureAwait(false);
-
-            //if (result.Errors?.Count > 0)
-            //{
-            //    return Problem(detail: result.Errors.Select(_ => _.Message).FirstOrDefault(), statusCode: 500);
-            //}
-            //return Ok(result.Data);
-
-
-            if (query == null) { throw new ArgumentNullException(nameof(query)); }
+            if (query == null) {
+                throw new ArgumentNullException(nameof(query));
+            }
 
             var inputs = query.Variables.ToInputs();
             var queryToExecute = query.Query;
 
 
-            var executionOptions = new ExecutionOptions { Schema = _schema, Query = queryToExecute, Inputs = inputs, OperationName = query.OperationName };
+            var executionOptions = new ExecutionOptions
+            {
+                Schema = _schema,
+                Query = queryToExecute,
+                Inputs = inputs,
+                OperationName = query.OperationName
+            };
 
             var result = await _executer.ExecuteAsync(executionOptions).ConfigureAwait(false);
 

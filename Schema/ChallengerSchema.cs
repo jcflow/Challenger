@@ -8,6 +8,7 @@ namespace Schema
         public ChallengerSchema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<ChallengerQuery>();
+            Mutation = resolver.Resolve<ChallengerMutation>();
         }
     }
 }

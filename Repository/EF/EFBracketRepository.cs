@@ -28,9 +28,9 @@ namespace Repository.EF
             return base.Get(filter, orderBy);
         }
 
-        public void InsertBracket(Bracket bracket)
+        public Bracket InsertBracket(Bracket bracket)
         {
-            base.Insert(bracket);
+            return base.Insert(bracket);
         }
 
         public void UpdateBracket(Bracket bracket)

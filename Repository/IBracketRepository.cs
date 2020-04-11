@@ -12,7 +12,7 @@ namespace Repository
                Expression<Func<Bracket, bool>> filter = null,
                Func<IQueryable<Bracket>, IOrderedQueryable<Bracket>> orderBy = null);
         Bracket GetBracketByID(int bracketId);
-        void InsertBracket(Bracket bracket);
+        Bracket InsertBracket(Bracket bracket);
         void DeleteBracket(int bracketId);
         void UpdateBracket(Bracket bracket);
     }

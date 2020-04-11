@@ -8,7 +8,7 @@ namespace Repository
     {
         IEnumerable<Tournament> GetTournaments();
         Tournament GetTournamentByID(int tournamentId);
-        void InsertTournament(Tournament tournament);
+        Tournament InsertTournament(Tournament tournament);
         void DeleteTournament(int tournamentId);
         void UpdateTournament(Tournament tournament);
     }

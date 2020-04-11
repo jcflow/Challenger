@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "/Users/jcflow/.dotnet/store/|arch|/|tfm|",
-      "/Users/jcflow/.nuget/packages"
-    ]
-  }
-}

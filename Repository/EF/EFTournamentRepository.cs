@@ -26,9 +26,9 @@ namespace Repository.EF
             return base.Get();
         }
 
-        public void InsertTournament(Tournament tournament)
+        public Tournament InsertTournament(Tournament tournament)
         {
-            base.Insert(tournament);
+            return base.Insert(tournament);
         }
 
         public void UpdateTournament(Tournament tournament)

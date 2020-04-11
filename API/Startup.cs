@@ -21,6 +21,7 @@ using Repository.EF;
 using Schema;
 using Schema.Types;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 
 namespace API
@@ -54,16 +55,21 @@ namespace API
 
             //GraphQL Query
             services.AddScoped<ChallengerQuery>();
+            services.AddScoped<ChallengerMutation>();
 
             //GraphQL Types
             services.AddSingleton<TournamentType>();
             services.AddSingleton<BracketType>();
             services.AddSingleton<ScoreType>();
             services.AddSingleton<TeamType>();
+            services.AddSingleton<TournamentInputType>();
+            services.AddSingleton<TeamInputType>();
 
             services.AddScoped<IDependencyResolver>(_ => new FuncDependencyResolver(_.GetRequiredService));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

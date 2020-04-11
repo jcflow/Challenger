@@ -12,7 +12,7 @@ namespace Repository
                Expression<Func<Team, bool>> filter = null,
                Func<IQueryable<Team>, IOrderedQueryable<Team>> orderBy = null);
         Team GetTeamByID(int teamId);
-        void InsertTeam(Team team);
+        Team InsertTeam(Team team);
         void DeleteTeam(int teamId);
         void UpdateTeam(Team team);
     }
