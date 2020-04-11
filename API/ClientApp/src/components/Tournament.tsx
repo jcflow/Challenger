@@ -70,9 +70,6 @@ class Tournament extends React.PureComponent<TournamentProps> {
         <li key={bracket.id} className="tournament-bracket__item">
               <div className="tournament-bracket__match">
                 <table className="tournament-bracket__table">
-                  <caption className="tournament-bracket__caption">
-                    <time dateTime="1998-02-20">20 February 1998</time>
-                  </caption>
                   <tbody className="tournament-bracket__content">
                   {
                     bracket.scores.map(score => this.renderScore(score, isWinner(score)))
@@ -88,7 +85,7 @@ class Tournament extends React.PureComponent<TournamentProps> {
     return (
         <tr key={score.id} className={"tournament-bracket__team" + (isWinner ? " tournament-bracket__team--winner" : "") }>
           <td className="tournament-bracket__country">
-            <abbr className="tournament-bracket__code" title="Finland">{score.team.name}</abbr>
+            <div className="tournament-bracket__code" title="Finland">{score.team.name}</div>
           </td>
           <td className="tournament-bracket__score">
             <span className="tournament-bracket__number">{score.value}</span>

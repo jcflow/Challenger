@@ -12,3 +12,29 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+html, body, #root {
+  background-color: #222831;
+  min-height: 100vh;
+}
+
+.challenger-nav {
+  background-color: #00adb5;
+}
+
+h1, h2, h3 {
+  color: #eeeeee;
+  text-align: center;
+  font-size: 3em;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container .logo {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.5em;
+}

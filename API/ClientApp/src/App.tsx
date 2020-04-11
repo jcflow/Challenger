@@ -4,8 +4,9 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import Tournament from './components/Tournament';
 
-import './custom.css'
-import './tournament.css'
+import './reset.css';
+import './custom.css';
+import './tournament.css';
 
 export default () => (
     <Layout>

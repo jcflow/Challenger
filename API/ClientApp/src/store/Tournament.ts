@@ -40,12 +40,10 @@ export interface Team {
 
 interface RequestTournamentAction {
     type: 'REQUEST_TOURNAMENT';
-    id: number;
 }
 
 interface ReceiveTournamentAction {
     type: 'RECEIVE_TOURNAMENT';
-    id: number;
     tournament: Tournament;
 }
 
@@ -69,9 +67,9 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', id: id, tournament: res.data.tournaments[0] });
+                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournaments[0] });
                 });
-            dispatch({ type: 'REQUEST_TOURNAMENT', id: id });
+            dispatch({ type: 'REQUEST_TOURNAMENT' });
         }
     }
 };
@@ -90,14 +88,12 @@ export const reducer: Reducer<TournamentState> = (state: TournamentState | undef
     switch (action.type) {
         case 'REQUEST_TOURNAMENT':
             return {
-                id: action.id,
                 isLoading: true
             };
         case 'RECEIVE_TOURNAMENT':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
-                id: action.id,
                 tournament: action.tournament,
                 isLoading: false
             };
