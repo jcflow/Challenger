@@ -84,3 +84,26 @@ h1, h2, h3 {
 .tournamentForm > * {
   margin-top: 1em;
 }
+
+.closeBadge {
+  cursor: pointer;
+  position: absolute;
+}
+
+.tournament-bracket__number:focus {
+  outline-width: 0;
+  background-color: #3498db;
+  color: white;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.tournament-bracket__number::-webkit-outer-spin-button,
+.tournament-bracket__number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.tournament-bracket__number[type=number] {
+  -moz-appearance: textfield;
+}

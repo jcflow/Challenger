@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GraphQL.Types;
 using Models;
 using Repository;
@@ -22,7 +24,7 @@ namespace Schema
                {
                    var tournament = context.GetArgument<Tournament>("tournament");
                    var teamsNames = context.GetArgument<Team[]>("teams");
-                   var initialLevel = (int) Math.Log2(teamsNames.Length) - 1;
+                   var initialLevel = (int)Math.Log2(teamsNames.Length) - 1;
                    var createdTournament = tournamentRepository.InsertTournament(tournament);
                    for (int i = 0; i + 1 < teamsNames.Length; i += 2)
                    {
@@ -67,8 +69,86 @@ namespace Schema
                        }
                    }
                    return createdTournament;
-               }
-           );
+               });
+            Field<ScoreType>(
+               "updateScore",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" },
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "value" }),
+               resolve: context =>
+               {
+                   var scoreId = context.GetArgument<int>("id");
+                   var newValue = context.GetArgument<int>("value");
+                   var score = scoreRepository.GetScoreByID(scoreId);
+                   var bracket = bracketRepository.GetBracketByID(score.BracketID);
+                   if (!bracket.Finished && newValue >= 0)
+                   {
+                       score.Value = newValue;
+                       scoreRepository.UpdateScore(score);
+                   }
+                   return score;
+               });
+            Field<BracketType>(
+               "updateBracket",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" },
+                   new QueryArgument<NonNullGraphType<BooleanGraphType>> { Name = "finished" }),
+               resolve: context =>
+               {
+                   var bracketId = context.GetArgument<int>("id");
+                   var finished = context.GetArgument<bool>("finished");
+                   var bracket = bracketRepository.GetBracketByID(bracketId);
+                   if (!bracket.Finished)
+                   {
+                       bracket.Finished = finished;
+                       bracketRepository.UpdateBracket(bracket);
+                   }
+                   var brackets = (List<Bracket>)bracketRepository.GetBrackets(_ => _.TournamentID == bracket.TournamentID);
+                   var notFinished = brackets.Where(b => b.Finished == false).ToList();
+                   if (brackets.Any() && !notFinished.Any())
+                   {
+                       var lowestLevel = brackets.OrderBy(b => b.Level).First().Level;
+                       if (lowestLevel > 0)
+                       {
+                           var filteredBrackets = brackets.Where(b => b.Level == lowestLevel).ToList();
+                           for (var index = 0; index + 1 < filteredBrackets.Count; index += 2)
+                           {
+                               var newBracket = new Bracket()
+                               {
+                                   Level = lowestLevel - 1,
+                                   Finished = false,
+                                   TournamentID = bracket.TournamentID
+                               };
+                               var createdBracket = bracketRepository.InsertBracket(newBracket);
+
+                               var bracketA = filteredBrackets[index];
+                               var bracketB = filteredBrackets[index + 1];
+                               var winnerAID = FindWinnerID(bracketA.ID, scoreRepository);
+                               var winnerBID = FindWinnerID(bracketB.ID, scoreRepository);
+                               var winnerIDs = new int[] { winnerAID, winnerBID };
+                               var teamsPerBracket = 2;
+                               for (var x = 0; x < teamsPerBracket; x++)
+                               {
+                                   var newScore = new Score()
+                                   {
+                                       BracketID = createdBracket.ID,
+                                       TeamID = winnerIDs[x],
+                                       Value = 0
+                                   };
+                                   scoreRepository.InsertScore(newScore);
+                               }
+                           }
+                       }
+                   }
+                   return bracket;
+               });
+        }
+
+        public static int FindWinnerID(int bracketId, IScoreRepository scoreRepository)
+        {
+            var scores = (List<Score>) scoreRepository.GetScores(_ => _.BracketID == bracketId);
+            var winner = scores.OrderByDescending(s => s.Value).First();
+            return winner.TeamID;
         }
     }
 }

@@ -73,8 +73,9 @@ namespace Repository.EF
 
         public virtual void Update(T entityToUpdate)
         {
-            _dbSet.Attach(entityToUpdate);
+            _dbSet.Add(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
+            _context.SaveChanges();
         }
     }
 }

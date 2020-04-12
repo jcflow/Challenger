@@ -402,6 +402,8 @@ body {
     align-items: center;
     background-color: #ecf0f1;
     border-radius: 50%;
+    text-align: center;
+    border: 0;
 }
 .tournament-bracket__team--winner .tournament-bracket__number {
     background-color: #27ae60;

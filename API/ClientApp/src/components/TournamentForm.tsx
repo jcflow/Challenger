@@ -2,10 +2,10 @@
 import _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, Redirect } from 'react-router';
+import { Redirect } from 'react-router';
 import { ApplicationState } from '../store';
 import * as TournamentFormStore from '../store/TournamentForm';
-import { ListGroup, ListGroupItem, FormGroup, Button, Input, Label, Form } from 'reactstrap';
+import { ListGroup, ListGroupItem, Button, Form } from 'reactstrap';
 
 // At runtime, Redux will merge together...
 type TournamentFormProps =

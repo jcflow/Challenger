@@ -47,9 +47,28 @@ interface ReceiveTournamentAction {
     tournament: Tournament;
 }
 
+interface UpdateBracketAction {
+    type: 'UPDATE_BRACKET';
+}
+
+interface UpdateScoreAction {
+    type: 'UPDATE_SCORE';
+}
+
+const requestTournament = (id: number) => {
+    const variables = { id: id };
+    console.log(variables);
+    const query = 'query($id: Int!) { tournament(id: $id) { id, name brackets { id level finished scores { id value team { id name } } } } }';
+    return fetch('https://localhost:5001/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: query, variables: variables }),
+    }).then(res => res.json());
+};
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestTournamentAction | ReceiveTournamentAction;
+type KnownAction = RequestTournamentAction | ReceiveTournamentAction | UpdateBracketAction | UpdateScoreAction;
 
 // ----------------
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
@@ -58,21 +77,50 @@ export const actionCreators = {
     requestTournament: (id: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        const variables = { id: id };
         if (appState && appState.tournament) {
-            const query = 'query($id: Int!) { tournament(id: $id) { id, name brackets { id level finished scores { id value team { id name } } } } }';
-            fetch('https://localhost:5001/graphql', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: query, variables: variables }),
-            })
-                .then(res => res.json())
+            requestTournament(id)
                 .then(res => {
                     dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
                 });
             dispatch({ type: 'REQUEST_TOURNAMENT' });
         }
-    }
+    },
+    closeBracket: (id: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        const variables = { id: id, finished: true };
+        if (appState && appState.tournament) {
+            const query = 'mutation ($id: Int!, $finished: Boolean!) { updateBracket(id: $id, finished: $finished) { id level finished } }';
+            fetch('https://localhost:5001/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, variables: variables }),
+            })
+                .then(res => requestTournament(appState.tournament!.tournament!.id!))
+                .then(res => {
+                    // @ts-ignore
+                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
+                });
+            dispatch({ type: 'UPDATE_BRACKET' });
+        }
+    },
+    updateScore: (id: number, value: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        const variables = { id: id, value: value };
+        if (appState && appState.tournament) {
+            const query = 'mutation ($id: Int!, $value: Int!) { updateScore(id: $id, value: $value) { id value } }';
+            fetch('https://localhost:5001/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, variables: variables }),
+            })
+                .then(res => requestTournament(appState.tournament!.tournament!.id))
+                .then(res => {
+                    // @ts-ignore
+                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
+                });
+            dispatch({ type: 'UPDATE_SCORE' });
+        }
+    },
 };
 
 // ----------------
@@ -89,14 +137,21 @@ export const reducer: Reducer<TournamentState> = (state: TournamentState | undef
     switch (action.type) {
         case 'REQUEST_TOURNAMENT':
             return {
+                ...state,
                 isLoading: true
             };
         case 'RECEIVE_TOURNAMENT':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
+                ...state,
                 tournament: action.tournament,
                 isLoading: false
+            };
+        case 'UPDATE_BRACKET':
+            return {
+                ...state,
+                isLoading: true,
             };
     }
 
