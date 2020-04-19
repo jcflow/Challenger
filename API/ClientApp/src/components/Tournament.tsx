@@ -84,7 +84,7 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
   }
 
     private renderRound(round: Bracket[], index: number) {
-        const delay = 5000;
+        const delay = 350;
       const style = {
           "animation-delay": `${index * delay}ms`
       } as React.CSSProperties;
