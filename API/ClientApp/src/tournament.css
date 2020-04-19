@@ -5,8 +5,6 @@
  */
 /* vietnamese */
 
-
-
 @keyframes lineAnimation {
     to {
         opacity: 1;
@@ -82,7 +80,7 @@ html {
     justify-content: center;
     height: 100%;
     min-height: 100%;
-    border-bottom: 1px dashed #e5e5e5;
+    border-bottom: 1px solid #eeeeee;
     padding-bottom: 2em;
     margin-bottom: 2em;
     transition: padding 0.2s ease-in-out, margin 0.2s ease-in-out;
@@ -413,6 +411,7 @@ html {
     }
 }
 .tournament-bracket__country {
+    width: 100%;
     font-size: 0.95rem;
     display: flex;
     margin-top: 0.5em;
@@ -421,6 +420,7 @@ html {
 @media (max-width: 24em) {
     .tournament-bracket__country {
         margin-top: 0;
+        width: calc(100% - 4em);
     }
 }
 @media (min-width: 38em) and (max-width: 52em) {
@@ -433,6 +433,11 @@ html {
     }
 }
 .tournament-bracket__code {
+    width: 100%;
+    line-height: 1.5em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     padding: 0 0.5em;
     border: 0;
     text-decoration: none;

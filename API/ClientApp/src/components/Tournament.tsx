@@ -87,13 +87,13 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
                       !bracket.finished &&
                       <div className="close-badge" onClick={() => this.props.closeBracket(bracket.id)}>Close</div>
                   }
-                <table className="tournament-bracket__table">
-                  <tbody className="tournament-bracket__content">
+                <div className="tournament-bracket__table">
+                  <div className="tournament-bracket__content">
                   {
                     bracket.scores.map(score => this.renderScore(score, bracket.finished, isWinner(score)))
                   }
-                  </tbody>
-                </table>
+                  </div>
+                </div>
               </div>
             </li>
     );
@@ -116,14 +116,14 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
         }
 
     return (
-        <tr key={score.id} className={"tournament-bracket__team" + (isWinner && finished ? " tournament-bracket__team--winner" : "") }>
-          <td className="tournament-bracket__country">
+        <div key={score.id} className={"tournament-bracket__team" + (isWinner && finished ? " tournament-bracket__team--winner" : "") }>
+          <div className="tournament-bracket__country">
             <div className="tournament-bracket__code">{score.team.name}</div>
-          </td>
-          <td className="tournament-bracket__score">
+          </div>
+          <div className="tournament-bracket__score">
               { scoreComponent }
-          </td>
-        </tr>
+          </div>
+        </div>
     );
   }
 

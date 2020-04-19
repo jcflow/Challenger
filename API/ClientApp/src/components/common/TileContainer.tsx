@@ -17,7 +17,7 @@ type TileContainerState = any;
 
 class TileContainer extends React.Component<TileContainerProps, TileContainerState> {
     public render() {
-        const delay = 125;
+        const delay = 200;
         return (
             <div className="tile-container">
                 {

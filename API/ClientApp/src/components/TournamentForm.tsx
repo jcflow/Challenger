@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from "react-router";
 import { ApplicationState } from '../store';
 import * as TournamentFormStore from '../store/TournamentForm';
-import { ListGroup, ListGroupItem, Button, Form } from 'reactstrap';
 
 // At runtime, Redux will merge together...
 type TournamentFormProps =
@@ -78,15 +77,21 @@ class TournamentForm extends React.Component<TournamentFormProps, TournamentForm
         }
     }
 
+    private verifySubmit() {
+        return this.state.name.trim() !== "" &&
+            this.state.teamNames.length >= 2 &&
+            Number.isInteger(Math.log2(this.state.teamNames.length));
+    }
+
     public render() {
-        const canSubmit = this.state.teamNames.length >= 2 && Number.isInteger(Math.log2(this.state.teamNames.length));
+        const canSubmit = this.verifySubmit();
 
         return (
             <React.Fragment>
                 <div className="title">
                     <h1>Create a new tournament</h1>
                 </div>
-                <form className="tournament-form">
+                <div className="tournament-form swing-in-top-fwd">
                     <label htmlFor="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Enter the tournament name..." onChange={(e) => this.handleNameChange(e)} value={this.state.name} />
 
@@ -105,16 +110,19 @@ class TournamentForm extends React.Component<TournamentFormProps, TournamentForm
                             onChange={(e) => this.handleTeamNameChange(e)}
                             value={this.state.currentTeamName}
                         />
-                        <input type="submit" onClick={(e) => this.handleAddTeamClick(e)} value="Add" />
+                        <input className="button" type="submit" onClick={(e) => this.handleAddTeamClick(e)} value="Add" />
                     </form>
-                    <ListGroup>
-                        {
-                            this.state.teamNames.map((teamName: string) =>
-                                <ListGroupItem key={_.uniqueId(teamName)}>{teamName}</ListGroupItem>)
-                        }
-                    </ListGroup>
-                    <Button disabled={!canSubmit} onClick={() => this.handleSubmit()}>Submit!</Button>
-                </form>
+                    {
+                        (!!this.state.teamNames.length) &&
+                            <ol className="item-list">
+                                {
+                                    this.state.teamNames.map((teamName: string) =>
+                                        <li key={_.uniqueId(teamName)}>{teamName}</li>)
+                                }
+                            </ol>
+                    }
+                    <button className={`button green${canSubmit ? " jello-horizontal" : ""}`} disabled={!canSubmit} onClick={() => this.handleSubmit()}>Submit!</button>
+                </div>
             </React.Fragment>
         );
     }
