@@ -8,9 +8,31 @@ namespace Models
         {
             using (var context = new ChallengerContext())
             {
+                Console.WriteLine("Inserting categories...");
+                var category1 = new TournamentCategory { Name = "DotA" };
+                var category2 = new TournamentCategory { Name = "Soccer" };
+                var category3 = new TournamentCategory { Name = "Yu-Gi-Oh!" };
+                var category4 = new TournamentCategory { Name = "Darts" };
+                var category5 = new TournamentCategory { Name = "Chess" };
+                var category6 = new TournamentCategory { Name = "Super Smash Bros. Ultimate" };
+                var category7 = new TournamentCategory { Name = "FIFA 20" };
+                var category8 = new TournamentCategory { Name = "Call of Duty: Modern Warfare" };
+                var category9 = new TournamentCategory { Name = "Pokémon" };
+                var category10 = new TournamentCategory { Name = "Volleyball" };
+                context.TournamentCategories.Add(category1);
+                context.TournamentCategories.Add(category2);
+                context.TournamentCategories.Add(category3);
+                context.TournamentCategories.Add(category4);
+                context.TournamentCategories.Add(category5);
+                context.TournamentCategories.Add(category6);
+                context.TournamentCategories.Add(category7);
+                context.TournamentCategories.Add(category8);
+                context.TournamentCategories.Add(category9);
+                context.TournamentCategories.Add(category10);
+                context.SaveChanges();
 
                 Console.WriteLine("Inserting tournaments...");
-                var tournament = new Tournament { Name = "Company League" };
+                var tournament = new Tournament { Name = "Company League", Category = category1 };
                 context.Tournaments.Add(tournament);
                 context.SaveChanges();
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -21,9 +23,10 @@ namespace Repository.EF
             return base.GetByID(tournamentId);
         }
 
-        public IEnumerable<Tournament> GetTournaments()
+        public IEnumerable<Tournament> GetTournaments(Expression<Func<Tournament, bool>> filter = null,
+            Func<IQueryable<Tournament>, IOrderedQueryable<Tournament>> orderBy = null)
         {
-            return base.Get();
+            return base.Get(filter, orderBy);
         }
 
         public Tournament InsertTournament(Tournament tournament)

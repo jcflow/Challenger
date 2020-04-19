@@ -20,7 +20,7 @@ namespace Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tournaments",
+                name: "TournamentCategories",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -29,7 +29,27 @@ namespace Models.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_TournamentCategories", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tournaments",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    CategoryID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Tournaments", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Tournaments_TournamentCategories_CategoryID",
+                        column: x => x.CategoryID,
+                        principalTable: "TournamentCategories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,7 +60,7 @@ namespace Models.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Finished = table.Column<bool>(nullable: false),
                     Level = table.Column<int>(nullable: false),
-                    TournamentID = table.Column<int>(nullable: true)
+                    TournamentID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +70,7 @@ namespace Models.Migrations
                         column: x => x.TournamentID,
                         principalTable: "Tournaments",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,8 +80,8 @@ namespace Models.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<int>(nullable: false),
-                    TeamID = table.Column<int>(nullable: true),
-                    BracketID = table.Column<int>(nullable: true)
+                    TeamID = table.Column<int>(nullable: false),
+                    BracketID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,13 +91,13 @@ namespace Models.Migrations
                         column: x => x.BracketID,
                         principalTable: "Brackets",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Scores_Teams_TeamID",
                         column: x => x.TeamID,
                         principalTable: "Teams",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -94,6 +114,11 @@ namespace Models.Migrations
                 name: "IX_Scores_TeamID",
                 table: "Scores",
                 column: "TeamID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tournaments_CategoryID",
+                table: "Tournaments",
+                column: "CategoryID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -109,6 +134,9 @@ namespace Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tournaments");
+
+            migrationBuilder.DropTable(
+                name: "TournamentCategories");
         }
     }
 }

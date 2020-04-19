@@ -57,7 +57,6 @@ interface UpdateScoreAction {
 
 const requestTournament = (id: number) => {
     const variables = { id: id };
-    console.log(variables);
     const query = 'query($id: Int!) { tournament(id: $id) { id, name brackets { id level finished scores { id value team { id name } } } } }';
     return fetch('https://localhost:5001/graphql', {
         method: 'POST',

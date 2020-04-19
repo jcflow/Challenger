@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using GraphQL.Types;
-using Models;
+﻿using GraphQL.Types;
 using Schema.Types;
 using Repository;
 
@@ -9,14 +6,26 @@ namespace Schema
 {
     public class ChallengerQuery : ObjectGraphType
     {
-        public ChallengerQuery(ITournamentRepository tournamentRepository)
+        public ChallengerQuery(ITournamentRepository tournamentRepository, ITournamentCategoryRepository tournamentCategoryRepository)
         {
-            Field<ListGraphType<TournamentType>>(
-                "tournaments",
-                Description = "Tum Urunler",
+            Field<TournamentCategoryType>(
+                "category",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" }
+                ),
                 resolve: context =>
                 {
-                    return tournamentRepository.GetTournaments();
+                    var id = context.GetArgument<int>("id");
+                    return tournamentCategoryRepository.GetTournamentCategoryByID(id);
+                }
+            );
+
+            Field<ListGraphType<TournamentCategoryType>>(
+                "categories",
+                Description = "All tournament categories.",
+                resolve: context =>
+                {
+                    return tournamentCategoryRepository.GetTournamentCategories();
                 }
             );
 
@@ -29,6 +38,15 @@ namespace Schema
                 {
                     var id = context.GetArgument<int>("id");
                     return tournamentRepository.GetTournamentByID(id);
+                }
+            );
+
+            Field<ListGraphType<TournamentType>>(
+                "tournaments",
+                Description = "Tum Urunler",
+                resolve: context =>
+                {
+                    return tournamentRepository.GetTournaments();
                 }
             );
         }

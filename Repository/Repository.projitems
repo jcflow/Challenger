@@ -19,6 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)EF\EFBracketRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EF\EFScoreRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EF\EFTeamRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EF\EFTournamentCategoryRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ITournamentCategoryRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)EF\" />

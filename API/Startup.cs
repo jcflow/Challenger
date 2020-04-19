@@ -43,6 +43,7 @@ namespace API
             services.AddSingleton<ChallengerContext>();
 
             //Data Repository
+            services.AddTransient<ITournamentCategoryRepository, EFTournamentCategoryRepository>();
             services.AddTransient<ITournamentRepository, EFTournamentRepository>();
             services.AddTransient<IBracketRepository, EFBracketRepository>();
             services.AddTransient<IScoreRepository, EFScoreRepository>();
@@ -58,6 +59,7 @@ namespace API
             services.AddScoped<ChallengerMutation>();
 
             //GraphQL Types
+            services.AddSingleton<TournamentCategoryType>();
             services.AddSingleton<TournamentType>();
             services.AddSingleton<BracketType>();
             services.AddSingleton<ScoreType>();

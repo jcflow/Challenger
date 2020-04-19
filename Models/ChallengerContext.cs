@@ -6,6 +6,7 @@ namespace Models
 {
     public class ChallengerContext : DbContext
     {
+        public DbSet<TournamentCategory> TournamentCategories { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Score> Scores { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }

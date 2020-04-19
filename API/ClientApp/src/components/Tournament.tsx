@@ -83,9 +83,13 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
     );
   }
 
-  private renderRound(round: Bracket[], index: number) {
-    return (
-        <div key={index} className="tournament-bracket__round">
+    private renderRound(round: Bracket[], index: number) {
+        const delay = 5000;
+      const style = {
+          "animation-delay": `${index * delay}ms`
+      } as React.CSSProperties;
+        return (
+            <div key={index} className="tournament-bracket__round slide-in-left" style={style}>
           <ul className="tournament-bracket__list">
             {
               round.map(bracket => this.renderBracket(bracket))
