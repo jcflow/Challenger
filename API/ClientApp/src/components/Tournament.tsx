@@ -16,15 +16,13 @@ type TournamentProps =
 
 type TournamentState = any;
 
-class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
-
-    private scoreInputRef = React.createRef<HTMLInputElement>();
-
+class Tournament extends React.Component<TournamentProps, TournamentState> {
     constructor(props: any) {
         super(props);
         this.state = {
             editingScore: false,
-            scoreId: 0
+            scoreId: 0,
+            scoreValue: 0
         };
     }
 
@@ -35,9 +33,11 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
 
   public render() {
     return (
-      <React.Fragment>
-        <h1>{this.props.tournament && this.props.tournament.name }</h1>
-        <div>{this.props.tournament && this.renderTournament()}</div>
+        <React.Fragment>
+            <div className="title">
+                <h1>{this.props.tournament && this.props.tournament.name}</h1>
+            </div>
+            <div className="padded container">{this.props.tournament && this.renderTournament()}</div>
       </React.Fragment>
     );
   }
@@ -46,31 +46,6 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
     // @ts-ignore
     const { brackets } = this.props.tournament;
       let sortedBrackets = _.orderBy(brackets, ['level']);
-      const minimumLevel = sortedBrackets[0].level;
-      //if (minimumLevel > 0) {
-      //    for (let level = minimumLevel - 1; level >= 0; level--) {
-      //        for (let bracketNumber = 0; bracketNumber < Math.pow(2, level); bracketNumber++) {
-      //            const scores = [];
-      //            for (let scoreNumber = 0; scoreNumber < 2; scoreNumber++) {
-      //                scores.push({
-      //                    id: `${level},${bracketNumber},${scoreNumber}`,
-      //                    value: 0,
-      //                    team: {
-      //                        id: `${level},${bracketNumber},${scoreNumber},${scoreNumber}`,
-      //                        name: "?"
-      //                    }
-      //                });
-      //            }
-      //            sortedBrackets.push({
-      //                id: `${level},${bracketNumber}`,
-      //                level: level,
-      //                finished: false,
-      //                scores: scores
-      //            });
-      //        }
-      //    }
-      //    sortedBrackets = _.orderBy(sortedBrackets, ['level']);
-      //}
     const rounds = (Object.values(_.groupBy(sortedBrackets, x => x.level)).reverse()) as Array<Bracket[]>;
     return (
         <div className="container">
@@ -110,7 +85,7 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
               <div className="tournament-bracket__match">
                   {
                       !bracket.finished &&
-                      <Badge className="closeBadge" color="success" onClick={() => this.props.closeBracket(bracket.id)}>Close</Badge>
+                      <div className="close-badge" onClick={() => this.props.closeBracket(bracket.id)}>Close</div>
                   }
                 <table className="tournament-bracket__table">
                   <tbody className="tournament-bracket__content">
@@ -132,12 +107,12 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
             scoreComponent = <input type="number"
                                     className="tournament-bracket__number"
                                     autoFocus
-                                    ref={this.scoreInputRef}
-                                    defaultValue={score.value}
+                                    value={this.state.scoreValue}
+                                    onChange={(e) => this.setState({ scoreValue: e.currentTarget.value })}
                                     onBlur={() => this.handleScoreUpdate()}/>;
         } else {
-            scoreComponent = <span className="tournament-bracket__number"
-                                   onClick={() => this.setState({ scoreId: score.id, editingScore: true })}>{score.value}</span>;
+            scoreComponent = <span className="tournament-bracket__number setable"
+                onClick={() => this.setState({ scoreId: score.id, scoreValue: score.value, editingScore: true })}>{score.value}</span>;
         }
 
     return (
@@ -153,7 +128,7 @@ class Tournament extends React.PureComponent<TournamentProps, TournamentState> {
   }
 
   private handleScoreUpdate() {
-      const scoreValue = Number(this.scoreInputRef.current!.value);
+      const scoreValue = this.state.scoreValue;
       const scoreId = this.state.scoreId;
       this.props.updateScore(scoreId, scoreValue);
       this.setState({ scoreId: 0, editingScore: false });

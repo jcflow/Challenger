@@ -23,7 +23,7 @@ class TileContainer extends React.Component<TileContainerProps, TileContainerSta
                 {
                     this.props.elements.map((element, index) => {
                         const style = {
-                            "animation-delay": `${index * delay}ms`
+                            animationDelay: `${index * delay}ms`
                         } as React.CSSProperties;
                         return (<a key={element.id}
                             href={this.props.baseRoute + element.id}

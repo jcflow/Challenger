@@ -14,10 +14,6 @@ type CategoryProps =
 type CategoryState = any;
 
 class Category extends React.Component<CategoryProps, CategoryState> {
-    constructor(props: any) {
-        super(props);
-    }
-
     // This method is called when the component is first added to the document
     public componentDidMount() {
         this.ensureDataFetched();

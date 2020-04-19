@@ -14,10 +14,6 @@ type HomeProps =
 type HomeState = any;
 
 class Home extends React.Component<HomeProps, HomeState> {
-    constructor(props: any) {
-        super(props);
-    }
-
     // This method is called when the component is first added to the document
     public componentDidMount() {
         this.ensureDataFetched();

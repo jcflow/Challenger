@@ -19,13 +19,17 @@ namespace Schema
                "createTournament",
                arguments: new QueryArguments(
                    new QueryArgument<NonNullGraphType<TournamentInputType>> { Name = "tournament" },
-                   new QueryArgument<NonNullGraphType<ListGraphType<TeamInputType>>> { Name = "teams" }),
+                   new QueryArgument<NonNullGraphType<ListGraphType<TeamInputType>>> { Name = "teams" },
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "categoryId" }),
                resolve: context =>
                {
                    var tournament = context.GetArgument<Tournament>("tournament");
                    var teamsNames = context.GetArgument<Team[]>("teams");
-                   var initialLevel = (int)Math.Log2(teamsNames.Length) - 1;
+                   var categoryId = context.GetArgument<int>("categoryId");
+                   tournament.CategoryID = categoryId;
                    var createdTournament = tournamentRepository.InsertTournament(tournament);
+
+                   var initialLevel = (int)Math.Log2(teamsNames.Length) - 1;
                    for (int i = 0; i + 1 < teamsNames.Length; i += 2)
                    {
                        var team1 = new Team

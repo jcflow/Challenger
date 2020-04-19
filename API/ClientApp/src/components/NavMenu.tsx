@@ -14,7 +14,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                 <Navbar className="challenger-nav navbar-expand-sm navbar-toggleable-sm navbar navbar-dark" light>
                     <Container>
                         <NavbarBrand className="logo-container" tag={Link} to="/">
-                            <img className="logo" src="logo.png" />
+                            <img className="logo" src="logo.png" alt="Challenger" />
                             <span>Challenger</span>
                         </NavbarBrand>
                         <NavbarToggler onClick={this.toggle} className="mr-2"/>
