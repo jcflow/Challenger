@@ -170,13 +170,13 @@ body {
             height: 45%;
             border-right: 2px solid #eeeeee;
             opacity: 0;
-            -moz-animation: lineAnimation 1s ease-in 1s forwards;
+            -moz-animation: lineAnimation 2s ease-in 1s forwards;
             /* Firefox */
-            -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+            -webkit-animation: lineAnimation 2s ease-in 1s forwards;
             /* Safari and Chrome */
-            -o-animation: lineAnimation 1s ease-in 1s forwards;
+            -o-animation: lineAnimation 2s ease-in 1s forwards;
             /* Opera */
-            animation: lineAnimation 1s ease-in 1s forwards;
+            animation: lineAnimation 2s ease-in 1s forwards;
             -webkit-animation-fill-mode: forwards;
             animation-fill-mode: forwards;
         }
@@ -185,13 +185,13 @@ body {
             border-top: 2px solid #eeeeee;
             transform: translateY(-1px);
             opacity: 0;
-            -moz-animation: lineAnimation 1s ease-in 1s forwards;
+            -moz-animation: lineAnimation 2s ease-in 1s forwards;
             /* Firefox */
-            -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+            -webkit-animation: lineAnimation 2s ease-in 1s forwards;
             /* Safari and Chrome */
-            -o-animation: lineAnimation 1s ease-in 1s forwards;
+            -o-animation: lineAnimation 2s ease-in 1s forwards;
             /* Opera */
-            animation: lineAnimation 1s ease-in 1s forwards;
+            animation: lineAnimation 2s ease-in 1s forwards;
             -webkit-animation-fill-mode: forwards;
             animation-fill-mode: forwards;
         }
@@ -200,13 +200,13 @@ body {
             border-bottom: 2px solid #eeeeee;
             transform: translateY(1px);
             opacity: 0;
-            -moz-animation: lineAnimation 1s ease-in 1s forwards;
+            -moz-animation: lineAnimation 2s ease-in 1s forwards;
             /* Firefox */
-            -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+            -webkit-animation: lineAnimation 2s ease-in 1s forwards;
             /* Safari and Chrome */
-            -o-animation: lineAnimation 1s ease-in 1s forwards;
+            -o-animation: lineAnimation 2s ease-in 1s forwards;
             /* Opera */
-            animation: lineAnimation 1s ease-in 1s forwards;
+            animation: lineAnimation 2s ease-in 1s forwards;
             -webkit-animation-fill-mode: forwards;
             animation-fill-mode: forwards;
         }
@@ -266,13 +266,13 @@ body {
         height: 10%;
         border-left: 2px solid #eeeeee;
         opacity: 0;
-        -moz-animation: lineAnimation 1s ease-in 1s forwards;
+        -moz-animation: lineAnimation 2s ease-in 1s forwards;
         /* Firefox */
-        -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+        -webkit-animation: lineAnimation 2s ease-in 1s forwards;
         /* Safari and Chrome */
-        -o-animation: lineAnimation 1s ease-in 1s forwards;
+        -o-animation: lineAnimation 2s ease-in 1s forwards;
         /* Opera */
-        animation: lineAnimation 1s ease-in 1s forwards;
+        animation: lineAnimation 2s ease-in 1s forwards;
         -webkit-animation-fill-mode: forwards;
         animation-fill-mode: forwards;
     }
@@ -281,13 +281,13 @@ body {
         border-bottom: 2px solid #eeeeee;
         transform: translate(0, 1px);
         opacity: 0;
-        -moz-animation: lineAnimation 1s ease-in 1s forwards;
+        -moz-animation: lineAnimation 2s ease-in 1s forwards;
         /* Firefox */
-        -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+        -webkit-animation: lineAnimation 2s ease-in 1s forwards;
         /* Safari and Chrome */
-        -o-animation: lineAnimation 1s ease-in 1s forwards;
+        -o-animation: lineAnimation 2s ease-in 1s forwards;
         /* Opera */
-        animation: lineAnimation 1s ease-in 1s forwards;
+        animation: lineAnimation 2s ease-in 1s forwards;
         -webkit-animation-fill-mode: forwards;
         animation-fill-mode: forwards;
     }
@@ -296,13 +296,13 @@ body {
         border-top: 2px solid #eeeeee;
         transform: translate(0, -1px);
         opacity: 0;
-        -moz-animation: lineAnimation 1s ease-in 1s forwards;
+        -moz-animation: lineAnimation 2s ease-in 1s forwards;
         /* Firefox */
-        -webkit-animation: lineAnimation 1s ease-in 1s forwards;
+        -webkit-animation: lineAnimation 2s ease-in 1s forwards;
         /* Safari and Chrome */
-        -o-animation: lineAnimation 1s ease-in 1s forwards;
+        -o-animation: lineAnimation 2s ease-in 1s forwards;
         /* Opera */
-        animation: lineAnimation 1s ease-in 1s forwards;
+        animation: lineAnimation 2s ease-in 1s forwards;
         -webkit-animation-fill-mode: forwards;
         animation-fill-mode: forwards;
     }
