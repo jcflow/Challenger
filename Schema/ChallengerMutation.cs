@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
+using Hub;
 using Models;
 using Repository;
 using Schema.Types;
@@ -10,23 +11,29 @@ namespace Schema
 {
     public class ChallengerMutation : ObjectGraphType
     {
+        public static string UPDATE = "UPDATE";
+
         public ChallengerMutation(ITournamentRepository tournamentRepository,
             ITeamRepository teamRepository,
             IBracketRepository bracketRepository,
-            IScoreRepository scoreRepository)
+            IScoreRepository scoreRepository,
+            IUserRepository userRepository)
         {
             Field<TournamentType>(
                "createTournament",
                arguments: new QueryArguments(
                    new QueryArgument<NonNullGraphType<TournamentInputType>> { Name = "tournament" },
                    new QueryArgument<NonNullGraphType<ListGraphType<TeamInputType>>> { Name = "teams" },
-                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "categoryId" }),
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "categoryId" },
+                   new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "userId" }),
                resolve: context =>
                {
                    var tournament = context.GetArgument<Tournament>("tournament");
                    var teamsNames = context.GetArgument<Team[]>("teams");
                    var categoryId = context.GetArgument<int>("categoryId");
+                   var userId = context.GetArgument<int>("userId");
                    tournament.CategoryID = categoryId;
+                   tournament.AdministratorID = userId;
                    var createdTournament = tournamentRepository.InsertTournament(tournament);
 
                    var initialLevel = (int)Math.Log2(teamsNames.Length) - 1;
@@ -46,32 +53,30 @@ namespace Schema
                        {
                            var bracket = new Bracket
                            {
-                               Tournament = createdTournament,
                                Level = initialLevel,
                                Finished = false,
-                               TournamentID = createdTournament.ID
+                               Tournament = createdTournament
                            };
                            var createdBracket = bracketRepository.InsertBracket(bracket);
                            var score1 = new Score
                            {
                                Value = 0,
                                Team = createdTeam1,
-                               TeamID = createdTeam1.ID,
-                               Bracket = createdBracket,
-                               BracketID = createdBracket.ID
+                               Bracket = createdBracket
                            };
                            var score2 = new Score
                            {
                                Value = 0,
                                Team = createdTeam2,
-                               TeamID = createdTeam2.ID,
-                               Bracket = createdBracket,
-                               BracketID = createdBracket.ID
+                               Bracket = createdBracket
                            };
                            scoreRepository.InsertScore(score1);
                            scoreRepository.InsertScore(score2);
                        }
                    }
+
+                   ConnectionHub.SendToAll(UPDATE);
+
                    return createdTournament;
                });
             Field<ScoreType>(
@@ -90,6 +95,9 @@ namespace Schema
                        score.Value = newValue;
                        scoreRepository.UpdateScore(score);
                    }
+
+                   ConnectionHub.SendToAll(UPDATE);
+
                    return score;
                });
             Field<BracketType>(
@@ -144,7 +152,35 @@ namespace Schema
                            }
                        }
                    }
+
+                   ConnectionHub.SendToAll(UPDATE);
+
                    return bracket;
+               });
+            Field<UserType>(
+               "signup",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                   new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" }),
+               resolve: context =>
+               {
+                   var name = context.GetArgument<string>("name");
+                   var password = context.GetArgument<string>("password");
+                   var user = new User { Name = name, Password = password };
+                   var createdUser = userRepository.InsertUser(user);
+                   return createdUser;
+               });
+
+            Field<UserType>(
+               "login",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                   new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" }),
+               resolve: context =>
+               {
+                   var name = context.GetArgument<string>("name");
+                   var password = context.GetArgument<string>("password");
+                   return userRepository.GetUsers(_ => _.Name == name && _.Password == password).First();
                });
         }
 

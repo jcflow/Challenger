@@ -88,6 +88,9 @@ namespace Models.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AdministratorID")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
@@ -95,6 +98,8 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AdministratorID");
 
                     b.HasIndex("CategoryID");
 
@@ -114,6 +119,24 @@ namespace Models.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("TournamentCategories");
+                });
+
+            modelBuilder.Entity("Models.User", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Models.Bracket", b =>
@@ -142,6 +165,12 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Tournament", b =>
                 {
+                    b.HasOne("Models.User", "Administrator")
+                        .WithMany("Tournaments")
+                        .HasForeignKey("AdministratorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.TournamentCategory", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryID")

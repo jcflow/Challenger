@@ -8,6 +8,12 @@ namespace Models
         {
             using (var context = new ChallengerContext())
             {
+
+                Console.WriteLine("Inserting users...");
+                var user = new User { Name = "juan", Password = "Juan123" };
+                context.Users.Add(user);
+                context.SaveChanges();
+
                 Console.WriteLine("Inserting categories...");
                 var category1 = new TournamentCategory { Name = "DotA" };
                 var category2 = new TournamentCategory { Name = "Soccer" };
@@ -19,6 +25,7 @@ namespace Models
                 var category8 = new TournamentCategory { Name = "Call of Duty: Modern Warfare" };
                 var category9 = new TournamentCategory { Name = "Pokémon" };
                 var category10 = new TournamentCategory { Name = "Volleyball" };
+
                 context.TournamentCategories.Add(category1);
                 context.TournamentCategories.Add(category2);
                 context.TournamentCategories.Add(category3);
@@ -32,7 +39,7 @@ namespace Models
                 context.SaveChanges();
 
                 Console.WriteLine("Inserting tournaments...");
-                var tournament = new Tournament { Name = "Company League", Category = category1 };
+                var tournament = new Tournament { Name = "Company League", Category = category1, Administrator = user };
                 context.Tournaments.Add(tournament);
                 context.SaveChanges();
 

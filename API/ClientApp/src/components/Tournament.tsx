@@ -2,15 +2,19 @@
 import _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from "react-router-dom";
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as TournamentStore from '../store/Tournament';
-import {Bracket, Score} from "../store/Tournament";
-import { Badge } from 'reactstrap';
+import * as LoginFormStore from '../store/LoginForm';
+import { Bracket, Score } from "../store/Tournament";
+import WebSocket from '../websocket.js';
+import Loader from "./Loader";
 
 // At runtime, Redux will merge together...
 type TournamentProps =
     TournamentStore.TournamentState // ... state we've requested from the Redux store
+    & LoginFormStore.LoginFormState // ... state we've requested from the Redux store
   & typeof TournamentStore.actionCreators // ... plus action creators we've requested
   & RouteComponentProps<{ id: string }>; // ... plus incoming routing parameters
 
@@ -27,13 +31,23 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
     }
 
   // This method is called when the component is first added to the document
-  public componentDidMount() {
-    this.ensureDataFetched();
+    public componentDidMount() {
+        const self = this;
+        self.ensureDataFetched();
+        WebSocket.onmessage = (event) => {
+            if (event.data === "UPDATE") {
+                self.ensureDataFetched();
+            }
+        };
   }
 
-  public render() {
+    public render() {
+        if (this.props.error) {
+            return <Redirect to="/404" />
+        }
     return (
         <React.Fragment>
+            <Loader active={this.props.isLoading} />
             <div className="title">
                 <h1>{this.props.tournament && this.props.tournament.name}</h1>
             </div>
@@ -41,6 +55,15 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
       </React.Fragment>
     );
   }
+
+    private isAdmin() {
+        // @ts-ignore
+        if (!this.props.user || !this.props.tournament.admin) {
+            return false;
+        }
+        // @ts-ignore
+        return this.props.user.id === this.props.tournament.admin.id;
+    }
 
   private renderTournament() {
     // @ts-ignore
@@ -61,7 +84,7 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
     private renderRound(round: Bracket[], index: number) {
         const delay = 350;
       const style = {
-          "animation-delay": `${index * delay}ms`
+          animationDelay: `${index * delay}ms`
       } as React.CSSProperties;
         return (
             <div key={index} className="tournament-bracket__round slide-in-left" style={style}>
@@ -83,10 +106,10 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
     return (
         <li key={bracket.id} className="tournament-bracket__item">
               <div className="tournament-bracket__match">
-                  {
-                      !bracket.finished &&
+                {
+                    (!bracket.finished && this.isAdmin()) &&
                       <div className="close-badge" onClick={() => this.props.closeBracket(bracket.id)}>Close</div>
-                  }
+                }
                 <div className="tournament-bracket__table">
                   <div className="tournament-bracket__content">
                   {
@@ -101,19 +124,21 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
 
   private renderScore(score: Score, finished: boolean, isWinner: boolean) {
         let scoreComponent = null;
-        if (finished) {
-            scoreComponent = <span className="tournament-bracket__number">{score.value}</span>;
-        } else if (this.state.scoreId === score.id && this.state.editingScore) {
-            scoreComponent = <input type="number"
-                                    className="tournament-bracket__number"
-                                    autoFocus
-                                    value={this.state.scoreValue}
-                                    onChange={(e) => this.setState({ scoreValue: e.currentTarget.value })}
-                                    onBlur={() => this.handleScoreUpdate()}/>;
-        } else {
-            scoreComponent = <span className="tournament-bracket__number setable"
-                onClick={() => this.setState({ scoreId: score.id, scoreValue: score.value, editingScore: true })}>{score.value}</span>;
-        }
+      if (finished) {
+          scoreComponent = <span className="tournament-bracket__number">{score.value}</span>;
+      } else if (this.isAdmin() && this.state.scoreId === score.id && this.state.editingScore) {
+          scoreComponent = <input type="number"
+              className="tournament-bracket__number"
+              autoFocus
+              value={this.state.scoreValue}
+              onChange={(e) => this.setState({ scoreValue: e.currentTarget.value })}
+              onBlur={() => this.handleScoreUpdate()} />;
+      } else if (this.isAdmin()) {
+          scoreComponent = <span className="tournament-bracket__number setable"
+              onClick={() => this.setState({ scoreId: score.id, scoreValue: score.value, editingScore: true })}>{score.value}</span>;
+      } else {
+          scoreComponent = <span className="tournament-bracket__number">{score.value}</span>;
+      }
 
     return (
         <div key={score.id} className={"tournament-bracket__team" + (isWinner && finished ? " tournament-bracket__team--winner" : "") }>
@@ -141,6 +166,6 @@ class Tournament extends React.Component<TournamentProps, TournamentState> {
 }
 
 export default connect(
-  (state: ApplicationState) => state.tournament, // Selects which state properties are merged into the component's props
+    (state: ApplicationState) => Object.assign({}, state.tournament, state.login), // Selects which state properties are merged into the component's props
     TournamentStore.actionCreators // Selects which action creators are merged into the component's props
 )(Tournament as any);

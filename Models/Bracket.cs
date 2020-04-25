@@ -8,6 +8,7 @@ namespace Models
     public class Bracket
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         public bool Finished { get; set; }

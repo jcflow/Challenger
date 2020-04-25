@@ -7,6 +7,7 @@ namespace Models
     public class Tournament
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         public string Name { get; set; }
@@ -15,5 +16,10 @@ namespace Models
 
         [ForeignKey("Category")]
         public int CategoryID { get; set; }
+
+        public User Administrator { get; set; }
+
+        [ForeignKey("Administrator")]
+        public int AdministratorID { get; set; }
     }
 }

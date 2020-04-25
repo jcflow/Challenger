@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import * as HomeStore from "../store/Home";
 import {RouteComponentProps} from "react-router";
 import TileContainer from "./common/TileContainer";
-import {ApplicationState} from "../store";
+import { ApplicationState } from "../store";
+import Loader from "./Loader";
 
 // At runtime, Redux will merge together...
 type HomeProps =
@@ -18,11 +19,12 @@ class Home extends React.Component<HomeProps, HomeState> {
     public componentDidMount() {
         this.ensureDataFetched();
     }
-
+        
     public render() {
         const elements = this.props.categories.map(category => ({ id: category.id, text: category.name, imageUrl: "/resources/" + category.id + ".jpg" }));
         return (
             <React.Fragment>
+                <Loader active={this.props.isLoading} />
                 <div className="title">
                     <h1>Games</h1>
                 </div>

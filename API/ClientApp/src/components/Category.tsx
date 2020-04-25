@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as CategoryStore from "../store/Category";
-import {RouteComponentProps} from "react-router";
+import {RouteComponentProps, Redirect} from "react-router";
 import TileContainer from "./common/TileContainer";
-import {ApplicationState} from "../store";
+import { ApplicationState } from "../store";
+import WebSocket from '../websocket.js';
+import Loader from "./Loader";
 
 // At runtime, Redux will merge together...
 type CategoryProps =
@@ -16,14 +18,24 @@ type CategoryState = any;
 class Category extends React.Component<CategoryProps, CategoryState> {
     // This method is called when the component is first added to the document
     public componentDidMount() {
-        this.ensureDataFetched();
+        const self = this;
+        self.ensureDataFetched();
+        WebSocket.onmessage = (event) => {
+            if (event.data === "UPDATE") {
+                self.ensureDataFetched();
+            }
+        };
     }
 
     public render() {
+        if (this.props.error) {
+            return <Redirect to="/404" />
+        }
         const categoryId = parseInt(this.props.match.params.id, 10) || 0;
         const elements = this.props.tournaments.map(tournament => ({ id: tournament.id, text: tournament.name, imageUrl: "/resources/" + categoryId + ".jpg" }));
         return (
             <React.Fragment>
+                <Loader active={this.props.isLoading} />
                 <div className="title">
                     <h1>Tournaments</h1>
                 </div>

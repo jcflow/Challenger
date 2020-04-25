@@ -1,17 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using API.Queries;
-using GraphiQl;
-using GraphQl.AspNetCore;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,8 +15,11 @@ using Repository.EF;
 using Schema;
 using Schema.Types;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-
+using System.Net.WebSockets;
+using System.Threading;
+using System.Timers;
+using System.Text;
+using Hub;
 
 namespace API
 {
@@ -43,6 +40,7 @@ namespace API
             services.AddSingleton<ChallengerContext>();
 
             //Data Repository
+            services.AddTransient<IUserRepository, EFUserRepository>();
             services.AddTransient<ITournamentCategoryRepository, EFTournamentCategoryRepository>();
             services.AddTransient<ITournamentRepository, EFTournamentRepository>();
             services.AddTransient<IBracketRepository, EFBracketRepository>();
@@ -59,6 +57,7 @@ namespace API
             services.AddScoped<ChallengerMutation>();
 
             //GraphQL Types
+            services.AddSingleton<UserType>();
             services.AddSingleton<TournamentCategoryType>();
             services.AddSingleton<TournamentType>();
             services.AddSingleton<BracketType>();
@@ -83,6 +82,7 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ConnectionHub.Init();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,22 +95,30 @@ namespace API
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseDefaultFiles();
+            app.UseFileServer(enableDirectoryBrowsing: true);
+            app.UseWebSockets(); // Only for Kestrel
+
+            app.Map("/ws", builder =>
+            {
+                builder.Use(async (context, next) =>
+                {
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        await ConnectionHub.Echo(webSocket);
+                        return;
+                    }
+                    await next();
+                });
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //});
 
             app.UseSpa(spa =>
             {
@@ -121,6 +129,7 @@ namespace API
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
+import { User } from './LoginForm';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -8,11 +9,13 @@ export interface TournamentState {
     isLoading: boolean;
     id?: number;
     tournament?: Tournament;
+    error?: Error;
 }
 
 export interface Tournament {
     id: number;
     name: string;
+    admin: User;
     brackets: Bracket[];
 }
 
@@ -44,7 +47,8 @@ interface RequestTournamentAction {
 
 interface ReceiveTournamentAction {
     type: 'RECEIVE_TOURNAMENT';
-    tournament: Tournament;
+    tournament?: Tournament;
+    error?: Error;
 }
 
 interface UpdateBracketAction {
@@ -57,7 +61,7 @@ interface UpdateScoreAction {
 
 const requestTournament = (id: number) => {
     const variables = { id: id };
-    const query = 'query($id: Int!) { tournament(id: $id) { id, name brackets { id level finished scores { id value team { id name } } } } }';
+    const query = 'query($id: Int!) { tournament(id: $id) { id name admin { id } brackets { id level finished scores { id value team { id name } } } } }';
     return fetch('https://localhost:5001/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,8 +83,14 @@ export const actionCreators = {
         if (appState && appState.tournament) {
             requestTournament(id)
                 .then(res => {
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
-                });
+                    if (!(res.data && res.data.tournament)) {
+                        const error = new Error("Could not retrieve tournament.");
+                        dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: undefined, error: error });
+                        throw error;
+                    }
+                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament, error: undefined });
+                })
+                .catch(console.error);
             dispatch({ type: 'REQUEST_TOURNAMENT' });
         }
     },
@@ -93,12 +103,7 @@ export const actionCreators = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
-            })
-                .then(res => requestTournament(appState.tournament!.tournament!.id!))
-                .then(res => {
-                    // @ts-ignore
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
-                });
+            }).catch(console.error);
             dispatch({ type: 'UPDATE_BRACKET' });
         }
     },
@@ -111,12 +116,7 @@ export const actionCreators = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
-            })
-                .then(res => requestTournament(appState.tournament!.tournament!.id))
-                .then(res => {
-                    // @ts-ignore
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
-                });
+            }).catch(console.error);
             dispatch({ type: 'UPDATE_SCORE' });
         }
     },
@@ -145,6 +145,7 @@ export const reducer: Reducer<TournamentState> = (state: TournamentState | undef
             return {
                 ...state,
                 tournament: action.tournament,
+                error: action.error,
                 isLoading: false
             };
         case 'UPDATE_BRACKET':

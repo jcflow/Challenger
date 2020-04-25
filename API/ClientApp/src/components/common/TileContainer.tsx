@@ -1,5 +1,4 @@
 import * as React from "react";
-import {connect} from "react-redux";
 
 // At runtime, Redux will merge together...
 type TileContainerProps = {
@@ -15,7 +14,7 @@ type Element = {
 
 type TileContainerState = any;
 
-class TileContainer extends React.Component<TileContainerProps, TileContainerState> {
+class TileContainer extends React.PureComponent<TileContainerProps, TileContainerState> {
     public render() {
         const delay = 200;
         return (
@@ -38,4 +37,4 @@ class TileContainer extends React.Component<TileContainerProps, TileContainerSta
         );
     }
 }
-export default connect()(TileContainer);
+export default TileContainer;

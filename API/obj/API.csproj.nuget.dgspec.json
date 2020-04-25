@@ -14,7 +14,7 @@
         "outputPath": "/Users/jcflow/Projects/Challenger/API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/jcflow/.nuget/NuGet/NuGet.Config"
+          "/Users/jcflow/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -25,6 +25,9 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
+              "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj": {
+                "projectPath": "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj"
+              },
               "/Users/jcflow/Projects/Challenger/Models/Models.csproj": {
                 "projectPath": "/Users/jcflow/Projects/Challenger/Models/Models.csproj"
               },
@@ -98,6 +101,59 @@
         }
       }
     },
+    "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj",
+        "projectName": "Hub",
+        "projectPath": "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj",
+        "packagesPath": "/Users/jcflow/.nuget/packages/",
+        "outputPath": "/Users/jcflow/Projects/Challenger/Hub/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/jcflow/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "/Users/jcflow/Projects/Challenger/Models/Models.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -108,7 +164,7 @@
         "outputPath": "/Users/jcflow/Projects/Challenger/Models/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/jcflow/.nuget/NuGet/NuGet.Config"
+          "/Users/jcflow/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -170,7 +226,7 @@
         "outputPath": "/Users/jcflow/Projects/Challenger/Schema/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/jcflow/.nuget/NuGet/NuGet.Config"
+          "/Users/jcflow/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -181,6 +237,9 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
+              "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj": {
+                "projectPath": "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj"
+              },
               "/Users/jcflow/Projects/Challenger/Models/Models.csproj": {
                 "projectPath": "/Users/jcflow/Projects/Challenger/Models/Models.csproj"
               }

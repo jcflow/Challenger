@@ -24,23 +24,26 @@ namespace Repository.EF
             return _dbSet.FromSqlRaw<T>(query, parameters).ToListAsync().Result;
         }
 
-        public virtual IEnumerable<T> Get(
+        public virtual IEnumerable<T> GetAsync(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
-            IQueryable<T> query = _dbSet;
+            using (var challengerContext = new ChallengerContext())
+            {
+                IQueryable<T> query = challengerContext.Set<T>();
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-            if (orderBy != null)
-            {
-                return orderBy(query).ToList();
-            }
-            else
-            {
-                return query.ToList();
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+                if (orderBy != null)
+                {
+                    return orderBy(query).ToList();
+                }
+                else
+                {
+                    return query.ToList();
+                }
             }
         }
 
@@ -52,7 +55,7 @@ namespace Repository.EF
         public virtual T Insert(T entity)
         {
             var entry = _dbSet.Add(entity);
-            _context.SaveChanges();
+                _context.SaveChanges();
             return entry.Entity;
         }
 

@@ -6,14 +6,14 @@ using Models;
 
 namespace Repository
 {
-    public interface IScoreRepository
+    public interface IUserRepository
     {
-        IEnumerable<Score> GetScores(
-               Expression<Func<Score, bool>> filter = null,
-               Func<IQueryable<Score>, IOrderedQueryable<Score>> orderBy = null);
-        Score GetScoreByID(int scoreId);
-        void InsertScore(Score score);
-        void DeleteScore(int scoreId);
-        void UpdateScore(Score score);
+        IEnumerable<User> GetUsers(
+               Expression<Func<User, bool>> filter = null,
+               Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = null);
+        User GetUserByID(int userId);
+        User InsertUser(User user);
+        void DeleteUser(int userId);
+        void UpdateUser(User user);
     }
 }

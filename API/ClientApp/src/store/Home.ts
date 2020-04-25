@@ -47,6 +47,9 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
+                    if (!(res.data && res.data.categories)) {
+                        throw new Error("Could not retrieve categories.");
+                    }
                     dispatch({ type: 'RECEIVE_CATEGORIES', categories: res.data.categories });
                 });
             dispatch({ type: 'REQUEST_CATEGORIES' });

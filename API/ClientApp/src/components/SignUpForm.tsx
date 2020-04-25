@@ -1,4 +1,4 @@
-import * as React from 'react';
+﻿import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
@@ -41,7 +41,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormPropsState> {
             name: this.state.name,
             password: this.state.password
         };
-        this.props.logIn(data);
+        this.props.signUp(data);
     }
 
     private verifySubmit() {
@@ -59,7 +59,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormPropsState> {
         return (
             <React.Fragment>
                 <div className="title">
-                    <h1>Log In</h1>
+                    <h1>Sign Up</h1>
                 </div>
                 <div className="tournament-form swing-in-top-fwd">
                     <label htmlFor="name">Name:</label>

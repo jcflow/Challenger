@@ -13,6 +13,10 @@ export interface TournamentFormState {
 // -----------------
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
 // They do not themselves have any side-effects; they just describe something that is going to happen.
+interface CleanFormAction {
+    type: 'CLEAN_FORM';
+}
+
 interface RequestCategoriesAction {
     type: 'REQUEST_CATEGORIES';
 }
@@ -33,7 +37,7 @@ interface NavigateTournamentAction {
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction| PostTournamentAction | NavigateTournamentAction;
+type KnownAction = CleanFormAction | RequestCategoriesAction | ReceiveCategoriesAction| PostTournamentAction | NavigateTournamentAction;
 
 // ----------------
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
@@ -48,9 +52,13 @@ export const actionCreators = {
                     name: data.name
                 },
                 teams: data.teamNames.map((teamName: string) => ({ name: teamName })),
-                categoryId: data.categoryId
+                categoryId: data.categoryId,
+                userId: data.userId
             };
-            const query = 'mutation ($tournament:tournamentInput!, $teams:[teamInput]!, $categoryId:Int!) { createTournament(tournament: $tournament, teams: $teams, categoryId: $categoryId) { id, name } }';
+
+            console.log(data);
+            console.log(variables);
+            const query = 'mutation ($tournament:tournamentInput!, $teams:[teamInput]!, $categoryId:Int!, $userId:Int!) { createTournament(tournament: $tournament, teams: $teams, categoryId: $categoryId, userId: $userId) { id, name } }';
             fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -58,15 +66,19 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
+                    if (!(res.data && res.data.createTournament)) {
+                        throw new Error("Could not create tournament.");
+                    }
                     dispatch({ type: 'NAVIGATE_TOURNAMENT', id: res.data.createTournament.id });
-                });
+                })
+                .catch(console.error);
             dispatch({ type: 'POST_TOURNAMENT' });
         }
     },
     requestCategories: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        if (appState && appState.home) {
+        if (appState && appState.tournamentForm) {
             const query = 'query { categories { id name } }';
             fetch('https://localhost:5001/graphql', {
                 method: 'POST',
@@ -75,9 +87,20 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
+                    if (!(res.data && res.data.categories)) {
+                        throw new Error("Could not retrieve categories.");
+                    }
                     dispatch({ type: 'RECEIVE_CATEGORIES', categories: res.data.categories });
-                });
+                })
+                .catch(console.error);
             dispatch({ type: 'REQUEST_CATEGORIES' });
+        }
+    },
+    cleanForm: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        // Only load data if it's something we don't already have (and are not already loading)
+        const appState = getState();
+        if (appState && appState.tournamentForm) {
+            dispatch({ type: 'CLEAN_FORM' });
         }
     }
 };
@@ -122,6 +145,12 @@ export const reducer: Reducer<TournamentFormState> = (state: TournamentFormState
                 id: action.id,
                 isLoading: false,
                 categories: []
+            };
+        case 'CLEAN_FORM':
+            return {
+                ...state,
+                id: undefined,
+                isLoading: true
             };
     }
 

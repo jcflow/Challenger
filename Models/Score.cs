@@ -7,6 +7,7 @@ namespace Models
     public class Score
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         public int Value { get; set; }

@@ -8,6 +8,7 @@ import {Tournament} from "./Tournament";
 export interface CategoryState {
     isLoading: boolean;
     tournaments: Tournament[];
+    error?: Error;
 }
 
 // -----------------
@@ -21,6 +22,7 @@ interface RequestTournamentsAction {
 interface ReceiveTournamentsAction {
     type: 'RECEIVE_TOURNAMENTS';
     tournaments: Tournament[];
+    error?: Error;
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
@@ -44,8 +46,13 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
-                    dispatch({ type: 'RECEIVE_TOURNAMENTS', tournaments: res.data.category.tournaments });
-                });
+                    if (!(res.data && res.data.category)) {
+                        const error = new Error("Could not retrieve category.");
+                        dispatch({ type: 'RECEIVE_TOURNAMENTS', tournaments: [], error: error });
+                        throw error;
+                    }
+                    dispatch({ type: 'RECEIVE_TOURNAMENTS', tournaments: res.data.category.tournaments, error: undefined });
+                }).catch(console.error);
             dispatch({ type: 'REQUEST_TOURNAMENTS' });
         }
     }
@@ -74,6 +81,7 @@ export const reducer: Reducer<CategoryState> = (state: CategoryState | undefined
             return {
                 ...state,
                 tournaments: action.tournaments,
+                error: action.error,
                 isLoading: false
             };
     }
