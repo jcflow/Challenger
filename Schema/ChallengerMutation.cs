@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
 using Hub;
+using Hub.Models;
 using Models;
 using Repository;
 using Schema.Types;
@@ -77,6 +78,14 @@ namespace Schema
 
                    ConnectionHub.SendToAll(UPDATE);
 
+                   var notification = new Notification()
+                   {
+                       Title = "New tournament created!",
+                       Body = createdTournament.Name,
+                       Params = { createdTournament.ID.ToString() }
+                   };
+                   PushHub.Send(notification);
+
                    return createdTournament;
                });
             Field<ScoreType>(
@@ -96,7 +105,22 @@ namespace Schema
                        scoreRepository.UpdateScore(score);
                    }
 
-                   ConnectionHub.SendToAll(UPDATE);
+                   var scores = (List<Score>)scoreRepository.GetScores(_ => _.BracketID == score.BracketID);
+                   var score1 = scores[0];
+                   var score2 = scores[1];
+                   var team = teamRepository.GetTeamByID(score.TeamID);
+                   var team1 = teamRepository.GetTeamByID(score1.TeamID);
+                   var team2 = teamRepository.GetTeamByID(score2.TeamID);
+
+                   var body = string.Format("{0} ({1}) - ({2}) {3}", team1.Name, score1.Value, score2.Value, team2.Name);
+
+                   var notification = new Notification()
+                   {
+                       Title = string.Format("{0} scored!", team.Name),
+                       Body = body,
+                       Params = { bracket.TournamentID.ToString() }
+                   };
+                   PushHub.Send(notification);
 
                    return score;
                });
@@ -154,6 +178,22 @@ namespace Schema
                    }
 
                    ConnectionHub.SendToAll(UPDATE);
+
+                   var scores = (List<Score>) scoreRepository.GetScores(_ => _.BracketID == bracketId);
+                   var score1 = scores[0];
+                   var score2 = scores[1];
+                   var team1 = teamRepository.GetTeamByID(score1.TeamID);
+                   var team2 = teamRepository.GetTeamByID(score2.TeamID);
+
+                   var body = string.Format("{0} ({1}) - ({2}) {3}", team1.Name, score1.Value, score2.Value, team2.Name);
+
+                   var notification = new Notification()
+                   {
+                       Title = "A bracket was finished!",
+                       Body = body,
+                       Params = { bracket.TournamentID.ToString() }
+                   };
+                   PushHub.Send(notification);
 
                    return bracket;
                });

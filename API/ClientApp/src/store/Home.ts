@@ -51,7 +51,8 @@ export const actionCreators = {
                         throw new Error("Could not retrieve categories.");
                     }
                     dispatch({ type: 'RECEIVE_CATEGORIES', categories: res.data.categories });
-                });
+                })
+                .catch(console.error);
             dispatch({ type: 'REQUEST_CATEGORIES' });
         }
     }

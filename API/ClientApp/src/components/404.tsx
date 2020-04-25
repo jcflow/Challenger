@@ -8,7 +8,7 @@ class NotFound extends React.PureComponent<any, any> {
                     <h1>404</h1>
                 </div>
                 <div className="centered-container">
-                    <div>💩</div>
+                    <span role="img">💩</span>
                 </div>
             </React.Fragment>
         );

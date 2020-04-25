@@ -11,10 +11,6 @@ namespace Hub
     {
         private static List<WebSocket> _webSockets = new List<WebSocket>();
 
-        public static void Init()
-        {
-        }
-
         public static async Task SendToAll(string message)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(message);
