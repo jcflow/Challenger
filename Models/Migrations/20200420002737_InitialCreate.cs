@@ -33,17 +33,38 @@ namespace Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tournaments",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    CategoryID = table.Column<int>(nullable: false)
+                    CategoryID = table.Column<int>(nullable: false),
+                    AdministratorID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tournaments", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Tournaments_Users_AdministratorID",
+                        column: x => x.AdministratorID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tournaments_TournamentCategories_CategoryID",
                         column: x => x.CategoryID,
@@ -116,6 +137,11 @@ namespace Models.Migrations
                 column: "TeamID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tournaments_AdministratorID",
+                table: "Tournaments",
+                column: "AdministratorID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tournaments_CategoryID",
                 table: "Tournaments",
                 column: "CategoryID");
@@ -134,6 +160,9 @@ namespace Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tournaments");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "TournamentCategories");

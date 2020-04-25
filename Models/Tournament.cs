@@ -15,5 +15,10 @@ namespace Models
 
         [ForeignKey("Category")]
         public int CategoryID { get; set; }
+
+        public User Administrator { get; set; }
+
+        [ForeignKey("Administrator")]
+        public int AdministratorID { get; set; }
     }
 }

@@ -2087,6 +2087,16 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "Hub/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Hub.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Hub.dll": {}
+        }
+      },
       "Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -7313,6 +7323,11 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
+    "Hub/1.0.0": {
+      "type": "project",
+      "path": "../Hub/Hub.csproj",
+      "msbuildProject": "../Hub/Hub.csproj"
+    },
     "Models/1.0.0": {
       "type": "project",
       "path": "../Models/Models.csproj",
@@ -7322,6 +7337,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "GraphQL >= 2.4.0",
+      "Hub >= 1.0.0",
       "Models >= 1.0.0"
     ]
   },
@@ -7349,6 +7365,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
+            "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj": {
+              "projectPath": "/Users/jcflow/Projects/Challenger/Hub/Hub.csproj"
+            },
             "/Users/jcflow/Projects/Challenger/Models/Models.csproj": {
               "projectPath": "/Users/jcflow/Projects/Challenger/Models/Models.csproj"
             }

@@ -1,5 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
+import { User } from './LoginForm';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -13,6 +14,7 @@ export interface TournamentState {
 export interface Tournament {
     id: number;
     name: string;
+    admin: User;
     brackets: Bracket[];
 }
 
@@ -57,7 +59,7 @@ interface UpdateScoreAction {
 
 const requestTournament = (id: number) => {
     const variables = { id: id };
-    const query = 'query($id: Int!) { tournament(id: $id) { id, name brackets { id level finished scores { id value team { id name } } } } }';
+    const query = 'query($id: Int!) { tournament(id: $id) { id name admin { id } brackets { id level finished scores { id value team { id name } } } } }';
     return fetch('https://localhost:5001/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,11 +96,6 @@ export const actionCreators = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
             })
-                .then(res => requestTournament(appState.tournament!.tournament!.id!))
-                .then(res => {
-                    // @ts-ignore
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
-                });
             dispatch({ type: 'UPDATE_BRACKET' });
         }
     },
@@ -112,11 +109,6 @@ export const actionCreators = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
             })
-                .then(res => requestTournament(appState.tournament!.tournament!.id))
-                .then(res => {
-                    // @ts-ignore
-                    dispatch({ type: 'RECEIVE_TOURNAMENT', tournament: res.data.tournament });
-                });
             dispatch({ type: 'UPDATE_SCORE' });
         }
     },

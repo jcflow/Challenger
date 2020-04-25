@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import * as CategoryStore from "../store/Category";
 import {RouteComponentProps} from "react-router";
 import TileContainer from "./common/TileContainer";
-import {ApplicationState} from "../store";
+import { ApplicationState } from "../store";
+import WebSocket from '../websocket.js';
 
 // At runtime, Redux will merge together...
 type CategoryProps =
@@ -16,7 +17,13 @@ type CategoryState = any;
 class Category extends React.Component<CategoryProps, CategoryState> {
     // This method is called when the component is first added to the document
     public componentDidMount() {
-        this.ensureDataFetched();
+        const self = this;
+        self.ensureDataFetched();
+        WebSocket.onmessage = (event) => {
+            if (event.data === "UPDATE") {
+                self.ensureDataFetched();
+            }
+        };
     }
 
     public render() {
