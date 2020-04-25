@@ -76,10 +76,6 @@ html, body, #root {
     color: white;
 }
 
-.challenger-nav .menu :not(:last-child) {
-    margin-right: 1em;
-}
-
 h1, h2, h3 {
   color: #eeeeee;
   text-align: center;

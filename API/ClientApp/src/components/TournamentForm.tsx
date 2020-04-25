@@ -5,12 +5,10 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from "react-router";
 import { ApplicationState } from '../store';
 import * as TournamentFormStore from '../store/TournamentForm';
-import * as LoginFormStore from '../store/LoginForm';
 
 // At runtime, Redux will merge together...
 type TournamentFormProps =
     TournamentFormStore.TournamentFormState // ... state we've requested from the Redux store
-    & LoginFormStore.LoginFormState // ... state we've requested from the Redux store
     & typeof TournamentFormStore.actionCreators // ... plus action creators we've requested
     & RouteComponentProps; // ... plus incoming routing parameters
 
@@ -58,15 +56,12 @@ class TournamentForm extends React.Component<TournamentFormProps, TournamentForm
     }
 
     private handleSubmit() {
-        if (this.props.user !== null) {
-            const data = {
-                name: this.state.name,
-                teamNames: this.state.teamNames,
-                categoryId: this.state.categoryId,
-                userId: this.props.user.id
-            };
-            this.props.postTournament(data);
-        }
+        const data = {
+            name: this.state.name,
+            teamNames: this.state.teamNames,
+            categoryId: this.state.categoryId
+        };
+        this.props.postTournament(data);
     }
 
     private handleCategoryChange(e: any) {
@@ -75,9 +70,7 @@ class TournamentForm extends React.Component<TournamentFormProps, TournamentForm
 
     public componentDidUpdate(prevProps: TournamentFormProps) {
         if (this.props.id) {
-            const url = `/tournament/${this.props.id}`;
-            this.props.cleanForm();
-            this.props.history.push(url);
+            this.props.history.push(`/tournament/${this.props.id}`);
         }
         if (this.props.categories !== prevProps.categories && this.props.categories.length) {
             this.setState({ categoryId: this.props.categories[0].id });
@@ -140,6 +133,6 @@ class TournamentForm extends React.Component<TournamentFormProps, TournamentForm
 }
 
 export default connect(
-    (state: ApplicationState) => Object.assign({}, state.tournamentForm, state.login), // Selects which state properties are merged into the component's props
+    (state: ApplicationState) => state.tournamentForm, // Selects which state properties are merged into the component's props
     TournamentFormStore.actionCreators // Selects which action creators are merged into the component's props
 )(TournamentForm as any);

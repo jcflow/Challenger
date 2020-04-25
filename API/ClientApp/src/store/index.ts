@@ -2,12 +2,10 @@ import * as Home from './Home';
 import * as Tournament from './Tournament';
 import * as Category from './Category';
 import * as TournamentForm from './TournamentForm';
-import * as LoginForm from './LoginForm';
 
 // The top-level state object
 export interface ApplicationState {
     home: Home.HomeState | undefined;
-    login: LoginForm.LoginFormState | undefined;
     category: Category.CategoryState | undefined;
     tournament: Tournament.TournamentState | undefined;
     tournamentForm: TournamentForm.TournamentFormState | undefined;
@@ -18,7 +16,6 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     home: Home.reducer,
-    login: LoginForm.reducer,
     category: Category.reducer,
     tournament: Tournament.reducer,
     tournamentForm: TournamentForm.reducer

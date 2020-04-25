@@ -1,51 +1,56 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
+import { Category } from './Home';
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
-export interface LoginFormState {
+export interface TournamentFormState {
     isLoading: boolean;
-    user: User | null;
-}
-
-export interface User {
-    id: number;
-    name: string;
+    id?: number;
+    categories: Category[];
 }
 
 // -----------------
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 interface RequestCategoriesAction {
-    type: 'REQUEST_LOGIN';
+    type: 'REQUEST_CATEGORIES';
 }
 
 interface ReceiveCategoriesAction {
-    type: 'RECEIVE_LOGIN';
-    user: User;
+    type: 'RECEIVE_CATEGORIES';
+    categories: Category[];
 }
 
-interface LogOutAction {
-    type: 'LOG_OUT';
+interface PostTournamentAction {
+    type: 'POST_TOURNAMENT';
+}
+
+interface NavigateTournamentAction {
+    type: 'NAVIGATE_TOURNAMENT';
+    id: number;
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction | LogOutAction;
+type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction| PostTournamentAction | NavigateTournamentAction;
 
 // ----------------
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    logIn: (data: any): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    postTournament: (data: any): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        if (appState && appState.login) {
+        if (appState && appState.tournamentForm) {
             const variables = {
-                name: data.name,
-                password: data.password
+                tournament: {
+                    name: data.name
+                },
+                teams: data.teamNames.map((teamName: string) => ({ name: teamName })),
+                categoryId: data.categoryId
             };
-            const query = 'mutation ($name:String!, $password:String!) { login(name: $name, password: $password) { id, name } }';
+            const query = 'mutation ($tournament:tournamentInput!, $teams:[teamInput]!, $categoryId:Int!) { createTournament(tournament: $tournament, teams: $teams, categoryId: $categoryId) { id, name } }';
             fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -53,18 +58,26 @@ export const actionCreators = {
             })
                 .then(res => res.json())
                 .then(res => {
-                    dispatch({ type: 'RECEIVE_LOGIN', user: res.data.login });
-                    localStorage.setItem('user', JSON.stringify(res.data.login));
+                    dispatch({ type: 'NAVIGATE_TOURNAMENT', id: res.data.createTournament.id });
                 });
-            dispatch({ type: 'REQUEST_LOGIN' });
+            dispatch({ type: 'POST_TOURNAMENT' });
         }
     },
-    logOut: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestCategories: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        if (appState && appState.login) {
-            dispatch({ type: 'LOG_OUT' });
-            localStorage.removeItem('user');
+        if (appState && appState.home) {
+            const query = 'query { categories { id name } }';
+            fetch('https://localhost:5001/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query }),
+            })
+                .then(res => res.json())
+                .then(res => {
+                    dispatch({ type: 'RECEIVE_CATEGORIES', categories: res.data.categories });
+                });
+            dispatch({ type: 'REQUEST_CATEGORIES' });
         }
     }
 };
@@ -72,40 +85,43 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const getUser = () => {
-    // @ts-ignore
-    var user = JSON.parse(localStorage.getItem('user'));
-    return user;
-};
+const unloadedState: TournamentFormState = { isLoading: false, categories: [] };
 
-const unloadedState: LoginFormState = { isLoading: false, user: getUser() };
-
-export const reducer: Reducer<LoginFormState> = (state: LoginFormState | undefined, incomingAction: Action): LoginFormState => {
+export const reducer: Reducer<TournamentFormState> = (state: TournamentFormState | undefined, incomingAction: Action): TournamentFormState => {
     if (state === undefined) {
         return unloadedState;
     }
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'REQUEST_LOGIN':
+        case 'REQUEST_CATEGORIES':
             return {
                 ...state,
-                user: null,
+                id: undefined,
                 isLoading: true
             };
-        case 'RECEIVE_LOGIN':
+        case 'RECEIVE_CATEGORIES':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
                 ...state,
-                user: action.user,
+                id: undefined,
+                categories: action.categories,
                 isLoading: false
             };
-        case 'LOG_OUT':
+        case 'POST_TOURNAMENT':
             return {
                 ...state,
-                user: null,
+                id: undefined,
                 isLoading: true
+            };
+        case 'NAVIGATE_TOURNAMENT':
+            // Only accept the incoming data if it matches the most recent request. This ensures we correctly
+            // handle out-of-order responses.
+            return {
+                id: action.id,
+                isLoading: false,
+                categories: []
             };
     }
 

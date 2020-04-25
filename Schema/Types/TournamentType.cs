@@ -8,9 +8,7 @@ namespace Schema.Types
 {
     public class TournamentType : ObjectGraphType<Tournament>
     {
-        public TournamentType(ITournamentCategoryRepository tournamentCategoryRepository,
-            IBracketRepository bracketRepository,
-            IUserRepository userRepository)
+        public TournamentType(ITournamentCategoryRepository tournamentCategoryRepository, IBracketRepository bracketRepository)
         {
             Name = "Tournament";
             Description = "Represents a tournament.";
@@ -32,14 +30,6 @@ namespace Schema.Types
                 resolve: context => {
                     var parent = context.Source;
                     return bracketRepository.GetBrackets(_ => _.TournamentID == parent.ID);
-                });
-
-            Field<UserType>(
-                "admin",
-                Description = "Kategoriye ait urunler",
-                resolve: context => {
-                    var parent = context.Source;
-                    return userRepository.GetUserByID(parent.AdministratorID);
                 });
         }
     }

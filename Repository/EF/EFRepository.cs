@@ -24,26 +24,23 @@ namespace Repository.EF
             return _dbSet.FromSqlRaw<T>(query, parameters).ToListAsync().Result;
         }
 
-        public virtual IEnumerable<T> GetAsync(
+        public virtual IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
-            using (var challengerContext = new ChallengerContext())
-            {
-                IQueryable<T> query = challengerContext.Set<T>();
+            IQueryable<T> query = _dbSet;
 
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
-                if (orderBy != null)
-                {
-                    return orderBy(query).ToList();
-                }
-                else
-                {
-                    return query.ToList();
-                }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
             }
         }
 

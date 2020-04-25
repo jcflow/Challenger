@@ -6,15 +6,31 @@ using Repository;
 
 namespace Schema.Types
 {
-    public class UserType : ObjectGraphType<User>
+    public class TournamentType : ObjectGraphType<Tournament>
     {
-        public UserType(ITournamentRepository tournamentRepository)
+        public TournamentType(ITournamentCategoryRepository tournamentCategoryRepository, IBracketRepository bracketRepository)
         {
-            Name = "User";
-            Description = "Represents a user.";
+            Name = "Tournament";
+            Description = "Represents a tournament.";
 
-            Field(_ => _.ID).Name("id").Description("The user ID.");
-            Field(_ => _.Name).Name("name").Description("The user name.");
+            Field(_ => _.ID).Name("id").Description("The tournament ID.");
+            Field(_ => _.Name).Name("name").Description("The tournament name.");
+
+            Field<TournamentCategoryType>(
+                "category",
+                Description = "The tournament's category.",
+                resolve: context => {
+                    var parent = context.Source;
+                    return tournamentCategoryRepository.GetTournamentCategoryByID(parent.CategoryID);
+                });
+
+            Field<ListGraphType<BracketType>>(
+                "brackets",
+                Description = "Kategoriye ait urunler",
+                resolve: context => {
+                    var parent = context.Source;
+                    return bracketRepository.GetBrackets(_ => _.TournamentID == parent.ID);
+                });
         }
     }
 }

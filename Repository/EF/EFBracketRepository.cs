@@ -25,7 +25,7 @@ namespace Repository.EF
         public IEnumerable<Bracket> GetBrackets(Expression<Func<Bracket, bool>> filter = null,
             Func<IQueryable<Bracket>, IOrderedQueryable<Bracket>> orderBy = null)
         {
-            return base.GetAsync(filter, orderBy);
+            return base.Get(filter, orderBy);
         }
 
         public Bracket InsertBracket(Bracket bracket)

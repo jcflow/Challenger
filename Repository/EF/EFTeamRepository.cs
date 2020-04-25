@@ -20,7 +20,7 @@ namespace Repository.EF
         public IEnumerable<Team> GetTeams(Expression<Func<Team, bool>> filter = null,
             Func<IQueryable<Team>, IOrderedQueryable<Team>> orderBy = null)
         {
-            return base.GetAsync(filter, orderBy);
+            return base.Get(filter, orderBy);
         }
 
         public Team GetTeamByID(int teamId)

@@ -26,7 +26,7 @@ namespace Repository.EF
         public IEnumerable<Tournament> GetTournaments(Expression<Func<Tournament, bool>> filter = null,
             Func<IQueryable<Tournament>, IOrderedQueryable<Tournament>> orderBy = null)
         {
-            return base.GetAsync(filter, orderBy);
+            return base.Get(filter, orderBy);
         }
 
         public Tournament InsertTournament(Tournament tournament)

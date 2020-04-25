@@ -25,7 +25,7 @@ namespace Repository.EF
         public IEnumerable<Score> GetScores(Expression<Func<Score, bool>> filter = null,
             Func<IQueryable<Score>, IOrderedQueryable<Score>> orderBy = null)
         {
-            return base.GetAsync(filter, orderBy);
+            return base.Get(filter, orderBy);
         }
 
         public void InsertScore(Score score)

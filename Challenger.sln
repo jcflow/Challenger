@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schema", "Schema\Schema.csp
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Repository", "Repository\Repository.shproj", "{BD489C15-A9FB-4DFB-A9E2-009673C358F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hub", "Hub\Hub.csproj", "{20B17A6B-8CB7-4606-A166-7A16B5E6F804}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,9 +27,5 @@ Global
 		{FAE24068-287C-4553-ADEE-34C2DEBA9EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE24068-287C-4553-ADEE-34C2DEBA9EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE24068-287C-4553-ADEE-34C2DEBA9EBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20B17A6B-8CB7-4606-A166-7A16B5E6F804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20B17A6B-8CB7-4606-A166-7A16B5E6F804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20B17A6B-8CB7-4606-A166-7A16B5E6F804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20B17A6B-8CB7-4606-A166-7A16B5E6F804}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

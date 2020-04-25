@@ -5,7 +5,6 @@ import Home from './components/Home';
 import Tournament from './components/Tournament';
 import TournamentForm from "./components/TournamentForm";
 import Category from "./components/Category";
-import LoginForm from "./components/LoginForm";
 
 import './reset.css';
 import './custom.css';
@@ -14,7 +13,6 @@ import './tournament.css';
 export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/login' component={LoginForm} />
         <Route path='/new' component={TournamentForm} />
         <Route path='/category/:id?' component={Category} />
         <Route path='/tournament/:id?' component={Tournament} />

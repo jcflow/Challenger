@@ -19,7 +19,7 @@ namespace Repository.EF
 
         public IEnumerable<TournamentCategory> GetTournamentCategories()
         {
-            return base.GetAsync();
+            return base.Get();
         }
 
         public TournamentCategory GetTournamentCategoryByID(int tournamentCategoryId)

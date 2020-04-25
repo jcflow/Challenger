@@ -6,36 +6,36 @@ using Models;
 
 namespace Repository.EF
 {
-    public class EFUserRepository : EFRepository<User>, IUserRepository
+    public class EFScoreRepository : EFRepository<Score>, IScoreRepository
     {
-        public EFUserRepository(ChallengerContext challengerContext) : base(challengerContext)
+        public EFScoreRepository(ChallengerContext challengerContext) : base(challengerContext)
         {
         }
 
-        public void DeleteUser(int userId)
+        public void DeleteScore(int scoreId)
         {
-            base.Delete(userId);
+            base.Delete(scoreId);
         }
 
-        public User GetUserByID(int userId)
+        public Score GetScoreByID(int scoreId)
         {
-            return base.GetByID(userId);
+            return base.GetByID(scoreId);
         }
 
-        public IEnumerable<User> GetUsers(Expression<Func<User, bool>> filter = null,
-            Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = null)
+        public IEnumerable<Score> GetScores(Expression<Func<Score, bool>> filter = null,
+            Func<IQueryable<Score>, IOrderedQueryable<Score>> orderBy = null)
         {
-            return base.GetAsync(filter, orderBy);
+            return base.Get(filter, orderBy);
         }
 
-        public User InsertUser(User user)
+        public void InsertScore(Score score)
         {
-            return base.Insert(user);
+            base.Insert(score);
         }
 
-        public void UpdateUser(User user)
+        public void UpdateScore(Score score)
         {
-            base.Update(user);
+            base.Update(score);
         }
     }
 }
