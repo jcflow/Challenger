@@ -39,7 +39,7 @@ export const actionCreators = {
         if (appState && appState.category) {
             const variables = { id: id };
             const query = 'query($id: Int!) { category(id: $id) { tournaments { id name } } }';
-            fetch('https://localhost:5001/graphql', {
+            fetch('/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),

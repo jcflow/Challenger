@@ -60,7 +60,7 @@ export const actionCreators = {
                 password: data.password
             };
             const query = 'mutation ($name:String!, $password:String!) { login(name: $name, password: $password) { id, name } }';
-            fetch('/graphql', {
+            fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
@@ -93,7 +93,7 @@ export const actionCreators = {
                 password: data.password
             };
             const query = 'mutation ($name:String!, $password:String!) { signup(name: $name, password: $password) { id, name } }';
-            fetch('/graphql', {
+            fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),

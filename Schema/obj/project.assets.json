@@ -7376,7 +7376,7 @@
       "outputPath": "/Users/jcflow/Projects/Challenger/Schema/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/jcflow/.config/NuGet/NuGet.Config"
+        "/Users/jcflow/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"

@@ -1,7 +1,10 @@
 .vs/
+.idea/
 Models/bin/
 Models/obj/
 API/bin/
 API/obj/
 Schema/bin/
 Schema/obj/
+Hub/bin/
+Hub/obj/

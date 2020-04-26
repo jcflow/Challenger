@@ -4594,7 +4594,7 @@
       "outputPath": "/Users/jcflow/Projects/Challenger/Hub/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/jcflow/.config/NuGet/NuGet.Config"
+        "/Users/jcflow/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"

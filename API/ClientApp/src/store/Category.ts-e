@@ -1,59 +1,59 @@
 import  { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
+import {Tournament} from "./Tournament";
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
-export interface HomeState {
+export interface CategoryState {
     isLoading: boolean;
-    categories: Category[];
-}
-
-export interface Category {
-    id?: number
-    name?: string
+    tournaments: Tournament[];
+    error?: Error;
 }
 
 // -----------------
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 
-interface RequestCategoriesAction {
-    type: 'REQUEST_CATEGORIES';
+interface RequestTournamentsAction {
+    type: 'REQUEST_TOURNAMENTS';
 }
 
-interface ReceiveCategoriesAction {
-    type: 'RECEIVE_CATEGORIES';
-    categories: Category[];
+interface ReceiveTournamentsAction {
+    type: 'RECEIVE_TOURNAMENTS';
+    tournaments: Tournament[];
+    error?: Error;
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction;
+type KnownAction = RequestTournamentsAction | ReceiveTournamentsAction;
 
 // ----------------
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestCategories: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestTournamentsByCategoryId: (id: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        if (appState && appState.home) {
-            const query = 'query { categories { id name } }';
-            fetch('/graphql', {
+        if (appState && appState.category) {
+            const variables = { id: id };
+            const query = 'query($id: Int!) { category(id: $id) { tournaments { id name } } }';
+            fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: query }),
+                body: JSON.stringify({ query: query, variables: variables }),
             })
                 .then(res => res.json())
                 .then(res => {
-                    if (!(res.data && res.data.categories)) {
-                        throw new Error("Could not retrieve categories.");
+                    if (!(res.data && res.data.category)) {
+                        const error = new Error("Could not retrieve category.");
+                        dispatch({ type: 'RECEIVE_TOURNAMENTS', tournaments: [], error: error });
+                        throw error;
                     }
-                    dispatch({ type: 'RECEIVE_CATEGORIES', categories: res.data.categories });
-                })
-                .catch(console.error);
-            dispatch({ type: 'REQUEST_CATEGORIES' });
+                    dispatch({ type: 'RECEIVE_TOURNAMENTS', tournaments: res.data.category.tournaments, error: undefined });
+                }).catch(console.error);
+            dispatch({ type: 'REQUEST_TOURNAMENTS' });
         }
     }
 };
@@ -61,26 +61,27 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: HomeState = { isLoading: false, categories: [] };
+const unloadedState: CategoryState = { isLoading: false, tournaments: [] };
 
-export const reducer: Reducer<HomeState> = (state: HomeState | undefined, incomingAction: Action): HomeState => {
+export const reducer: Reducer<CategoryState> = (state: CategoryState | undefined, incomingAction: Action): CategoryState => {
     if (state === undefined) {
         return unloadedState;
     }
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'REQUEST_CATEGORIES':
+        case 'REQUEST_TOURNAMENTS':
             return {
                 ...state,
                 isLoading: true
             };
-        case 'RECEIVE_CATEGORIES':
+        case 'RECEIVE_TOURNAMENTS':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
                 ...state,
-                categories: action.categories,
+                tournaments: action.tournaments,
+                error: action.error,
                 isLoading: false
             };
     }

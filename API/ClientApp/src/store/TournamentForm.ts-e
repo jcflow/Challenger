@@ -59,7 +59,7 @@ export const actionCreators = {
             console.log(data);
             console.log(variables);
             const query = 'mutation ($tournament:tournamentInput!, $teams:[teamInput]!, $categoryId:Int!, $userId:Int!) { createTournament(tournament: $tournament, teams: $teams, categoryId: $categoryId, userId: $userId) { id, name } }';
-            fetch('/graphql', {
+            fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query, variables: variables }),
@@ -80,7 +80,7 @@ export const actionCreators = {
         const appState = getState();
         if (appState && appState.tournamentForm) {
             const query = 'query { categories { id name } }';
-            fetch('/graphql', {
+            fetch('https://localhost:5001/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query }),

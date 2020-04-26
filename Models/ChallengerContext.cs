@@ -23,7 +23,7 @@ namespace Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = @"Server = 127.0.0.1; Database = challenger; User Id = sa; Password = Password123;";
+            var connectionString = @"Server = 172.18.0.2; Database = challenger; User Id = sa; Password = Password123;";
             optionsBuilder.UseSqlServer(connectionString);
         }
     }
