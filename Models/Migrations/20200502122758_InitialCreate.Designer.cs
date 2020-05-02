@@ -9,7 +9,7 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(ChallengerContext))]
-    [Migration("20200425041646_InitialCreate")]
+    [Migration("20200502122758_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

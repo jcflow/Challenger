@@ -71,10 +71,6 @@ a {
     text-decoration: none !important;
 }
 
-code {
-  color: #E01A76;
-}
-
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
@@ -525,22 +521,18 @@ h3 {
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 #root {
-    -webkit-animation: color-change-3x 7s linear infinite alternate both;
-    animation: color-change-3x 7s linear infinite alternate both;
+    -webkit-animation: color-change-2x 7s linear infinite alternate both;
+    animation: color-change-2x 7s linear infinite alternate both;
 }
 
 /**
  * ----------------------------------------
- * animation color-change-3x
+ * animation color-change-2x
  * ----------------------------------------
  */
-@-webkit-keyframes color-change-3x {
+@-webkit-keyframes color-change-2x {
     0% {
         background: #202040;
-    }
-
-    50% {
-        background: #2c003e;
     }
 
     100% {
@@ -548,13 +540,9 @@ h3 {
     }
 }
 
-@keyframes color-change-3x {
+@keyframes color-change-2x {
     0% {
         background: #202040;
-    }
-
-    50% {
-        background: #2c003e;
     }
 
     100% {

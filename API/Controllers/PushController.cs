@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using API.Controllers.Models;
+﻿using API.Controllers.Models;
 using Hub;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using WebPush;
 

@@ -15,6 +15,9 @@
     <ProjectReference Include="..\Hub\Hub.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
@@ -22,5 +25,4 @@
   <ItemGroup>
     <Compile Remove="TournamentType.cs" />
   </ItemGroup>
-  <Import Project="..\Repository\Repository.projitems" Label="Shared" Condition="Exists('..\Repository\Repository.projitems')" />
 </Project>

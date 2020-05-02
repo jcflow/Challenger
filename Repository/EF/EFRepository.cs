@@ -28,9 +28,9 @@ namespace Repository.EF
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
-            using (var challengerContext = new ChallengerContext())
+            using (var tempContext = new ChallengerContext())
             {
-                IQueryable<T> query = challengerContext.Set<T>();
+                IQueryable<T> query = tempContext.Set<T>();
 
                 if (filter != null)
                 {

@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Models
 {
@@ -23,8 +22,9 @@ namespace Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = @"Server = 172.18.0.2; Database = challenger; User Id = sa; Password = Password123;";
-            optionsBuilder.UseSqlServer(connectionString);
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("challenger"));
         }
     }
 }
