@@ -8,4 +8,6 @@ Schema/bin/
 Schema/obj/
 Hub/bin/
 Hub/obj/
+Repository/bin/
+Repository/obj/
 API/ClientApp/build/
