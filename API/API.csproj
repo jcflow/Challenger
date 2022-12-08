@@ -26,7 +26,7 @@
     <PackageReference Include="graphiql" Version="2.0.0" />
     <PackageReference Include="GraphQl.AspNetCore" Version="1.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.AspNetCore.Graphiql" Version="1.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.3" />
